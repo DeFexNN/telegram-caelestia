@@ -1,0 +1,148 @@
+# Maintainer: Sven-Hendrik Haase <svenstaro@archlinux.org>
+# Contributor: hexchain <i@hexchain.org>
+
+pkgname=telegram-desktop
+pkgver=7.3.3
+_td_commit=c15d3f5a5de6e3ba5839822c451152e5e18bb700
+_wallet_engine_ver=0.0.7
+pkgrel=2
+pkgdesc='Official Telegram Desktop client'
+arch=('x86_64')
+url="https://desktop.telegram.org/"
+license=('GPL-3.0-or-later WITH OpenSSL-exception')
+depends=(
+  'abseil-cpp'
+  'ada'
+  'cairo'
+  'ffmpeg'
+  'fontconfig'
+  'glib2'
+  'glibc'
+  'hicolor-icon-theme'
+  'hunspell'
+  'kcoreaddons'
+  'libavif'
+  'libfido2'
+  'libgcc'
+  'libheif'
+  'libjpeg-turbo'
+  'libjxl'
+  'libpipewire'
+  'libsrtp'
+  'libstdc++'
+  'libvpx'
+  'libx11'
+  'libxcb'
+  'libxcomposite'
+  'libxdamage'
+  'libxext'
+  'libxfixes'
+  'libxkbcommon'
+  'libxrandr'
+  'libxtst'
+  'lz4'
+  'minizip'
+  'openal'
+  'openh264'
+  'openssl'
+  'opus'
+  'pango'
+  'pipewire'
+  'qt6-base'
+  'qt6-declarative'
+  'qt6-imageformats'
+  'qt6-svg'
+  'qt6-wayland'
+  'rnnoise'
+  'tlottie'
+  'xxhash'
+  'zlib'
+)
+makedepends=(
+  'boost'
+  'boost-libs'
+  'cargo'
+  'cmake'
+  'git'
+  'glib2-devel'
+  'gobject-introspection'
+  'just'
+  'qt6-shadertools'
+  'gperf'
+  'libtg_owt'
+  'microsoft-gsl'
+  'ninja'
+  'python'
+  'range-v3'
+  'tl-expected'
+  'vulkan-headers'
+)
+optdepends=(
+  'geoclue: geoinformation support'
+  'crow-translate: translation provider'
+  'webkit2gtk-4.1: embedded browser features provided by webkit2gtk-4.1 (gtk3)'
+  'webkitgtk-6.0: embedded browser features provided by webkitgtk-6.0 (gtk4)'
+  'xdg-desktop-portal: desktop integration'
+)
+source=(
+  "https://github.com/telegramdesktop/tdesktop/releases/download/v${pkgver}/tdesktop-${pkgver}-full.tar.gz"
+  "git+https://github.com/tdlib/td.git#commit=${_td_commit}"
+  # We're vendoring wallet-engine because tdesktop requires a massive patch against it.
+  wallet-engine-${_wallet_engine_ver}.tar.gz::https://github.com/i582/wallet-engine/archive/refs/tags/v${_wallet_engine_ver}.tar.gz
+  https://github.com/desktop-app/patches/raw/refs/heads/master/wallet-engine.patch
+  patches/caelestia.patch
+  patches/night-green.tdesktop-theme
+)
+sha512sums=('3e76971f5ac1c8b4f29c867cf2a6e52f5eb71e479533daaaef26ba8bf53c10c6dd0abc09bb99ec213582546a50fa5306b2bcad023e85024979ebf04603c48540'
+            'dd4741b3621c5e76ba7c9eee44ffd41b1e6b6c24fdb19988efd780d307aff79a9dcfd710be9ad63db6857cbbd71c273c54d82be524a5326fc22f1233d9eb6ca2'
+            'f1a38de20459c5b780c98aaab037fdf34357980e7f3b93c4b523636d016ca4ffc9d9679c2ee4a246b138ef0474b8190d2db1874b204c006b0f30b3c950c62ff6'
+            '79460145f706d3eb244335700a30be2e6862db2bcda042244cf45ec5227956130a366c54a4240167327e33fde4c9fa671305a7f942acedd17e994d24e0612a2b'
+            'eaf59fa16a7b7b6012a517d96b569384f3fce4fe892608c012dc26baf4c18ecd2f8e6845af0c61316a1797c1bd03816237f61d957e9dbcb83202e6185e088363'
+            'ad27e734013e55c41611723cd4e20e0def2fabb470adbeb72f01ef340e33f702fb27ea02e313924b87b495bf01081c8901ff55e82846e19b40a52a061948b02e')
+
+prepare() {
+  cd wallet-engine-${_wallet_engine_ver}
+  patch -Np1 -i "$srcdir"/wallet-engine.patch
+  cd "$srcdir/tdesktop-$pkgver-full"
+  patch -Np1 -i "$srcdir/caelestia.patch"
+  install -Dm644 "$srcdir/night-green.tdesktop-theme" Telegram/Resources/night-green.tdesktop-theme
+}
+
+build() {
+  # Build wallet-engine
+  cd wallet-engine-${_wallet_engine_ver}
+  just build
+  just bindings-cpp
+  install -Dm644 target/release/libwallet_engine.a -t install/lib/
+  install -Dm644 bindings/cpp-experimental/* -t install/include/wallet_engine/
+  cd ..
+
+  # Build td
+  cmake -S td -B td/build \
+    -DCMAKE_BUILD_TYPE=None \
+    -DCMAKE_INSTALL_PREFIX="$PWD/td/install" \
+    -Wno-dev \
+    -DTD_E2E_ONLY=ON
+  cmake --build td/build
+  cmake --install td/build
+
+  # Build tdesktop
+
+  # Turns out we're allowed to use the official API key that telegram uses for
+  # their snap builds:
+  # https://github.com/telegramdesktop/tdesktop/blob/8fab9167beb2407c1153930ed03a4badd0c2b59f/snap/snapcraft.yaml#L87-L88
+  # Thanks @primeos!
+  cmake -B build -S tdesktop-$pkgver-full -G Ninja \
+    -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
+    -Dtde2e_DIR="$PWD/td/install/lib/cmake/tde2e" \
+    -DCMAKE_PREFIX_PATH="$PWD/wallet-engine-${_wallet_engine_ver}/install" \
+    -DCMAKE_BUILD_TYPE=None \
+    -DTDESKTOP_API_ID=611335 \
+    -DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

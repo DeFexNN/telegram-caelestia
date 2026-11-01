@@ -1,0 +1,9 @@
+/build/
+/td/
+/tdesktop-*-full/
+/wallet-engine-*/
+/*.tar.gz
+/pkg/
+/src/
+/*.pkg.tar.*
+*.log

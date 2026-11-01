@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Caelestia — Motion Lab</title>
+<style>
+:root {
+  --bg-primary: #0a0f0f;
+  --bg-secondary: #121817;
+  --bg-card: #192120;
+  --bg-card-hover: #1f2b2a;
+  --accent-primary: #9bd0cc;
+  --accent-hover: #b8ede9;
+  --accent-container: #255b58;
+  --accent-container-soft: rgba(37, 91, 88, 0.35);
+  --accent-on-container: #b8ede9;
+  --text-main: #e2eeec;
+  --text-muted: #829d9a;
+  --border-subtle: rgba(155, 208, 204, 0.12);
+  --border-active: rgba(155, 208, 204, 0.45);
+  --danger: #ff6b6b;
+  --success: #51cf66;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-pill: 9999px;
+  --ease-emphasized-decel: cubic-bezier(0.05, 0.70, 0.10, 1.00);
+  --ease-emphasized-accel: cubic-bezier(0.30, 0.00, 0.80, 0.15);
+  --speed-multiplier: 1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  padding: 30px 24px 140px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+header {
+  max-width: 1380px;
+  margin: 0 auto 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.badge-mint {
+  align-self: flex-start;
+  background: var(--accent-container-soft);
+  color: var(--accent-primary);
+  border: 1px solid var(--border-active);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-mint::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-primary);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 30%, var(--accent-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p.subtitle {
+  color: var(--text-muted);
+  font-size: 15px;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+.toolbar {
+  max-width: 1380px;
+  margin: 0 auto 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-filter {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  padding: 7px 15px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-filter:hover {
+  color: var(--text-main);
+  background: rgba(155, 208, 204, 0.08);
+}
+
+.btn-filter.active {
+  background: var(--accent-container);
+  color: var(--accent-on-container);
+  border-color: var(--border-active);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.speed-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.speed-btn.active {
+  background: var(--accent-primary);
+  color: #051a19;
+  border-color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.grid {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.card.status-approved {
+  border-color: rgba(81, 207, 102, 0.6);
+  box-shadow: 0 0 20px rgba(81, 207, 102, 0.15);
+}
+
+.card.status-rejected {
+  opacity: 0.45;
+  filter: grayscale(0.5);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: rgba(155, 208, 204, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.tag {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.demo-stage {
+  height: 190px;
+  background: var(--bg-primary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-trigger {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(25, 33, 32, 0.85);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+
+.demo-trigger:hover {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.card-desc {
+  font-size: 13.5px;
+  color: #c0d3d1;
+  line-height: 1.55;
+  flex-grow: 1;
+}
+
+.card-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--accent-primary);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 208, 204, 0.1);
+  word-break: break-all;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-vote {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s var(--ease-emphasized-decel);
+}
+
+.btn-approve {
+  background: rgba(81, 207, 102, 0.1);
+  color: #69db7c;
+  border-color: rgba(81, 207, 102, 0.25);
+}
+
+.btn-approve:hover, .card.status-approved .btn-approve {
+  background: #51cf66;
+  color: #062b10;
+  border-color: #51cf66;
+  box-shadow: 0 4px 14px rgba(81, 207, 102, 0.35);
+}
+
+.btn-reject {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff8787;
+  border-color: rgba(255, 107, 107, 0.25);
+}
+
+.btn-reject:hover, .card.status-rejected .btn-reject {
+  background: #ff6b6b;
+  color: #2b0606;
+  border-color: #ff6b6b;
+}
+
+/* STICKY FOOTER */
+.sticky-footer {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 24, 23, 0.92);
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-pill);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(155, 208, 204, 0.2);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+}
+
+.footer-stat {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  gap: 16px;
+}
+
+.footer-stat span b {
+  font-weight: 800;
+}
+
+.stat-approved b { color: #51cf66; }
+.stat-rejected b { color: #ff6b6b; }
+
+.btn-copy {
+  background: var(--accent-primary);
+  color: #051a19;
+  border: none;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(155, 208, 204, 0.4);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-copy:hover {
+  background: var(--accent-hover);
+  transform: scale(1.04);
+}
+
+/* ANIMATION MINI-DEMOS CSS */
+
+/* 1. Liquid Elastic Tab Bar */
+.demo-tabs {
+  position: relative;
+  display: flex;
+  background: #141c1b;
+  padding: 4px;
+  border-radius: 12px;
+  width: 320px;
+}
+.demo-tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s;
+}
+.demo-tab-btn.active { color: #0a1f1e; }
+.demo-tab-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background: var(--accent-primary);
+  border-radius: 8px;
+  z-index: 1;
+  transition: left calc(0.35s * var(--speed-multiplier)) var(--ease-emphasized-decel),
+              width calc(0.35s * var(--speed-multiplier)) var(--ease-emphasized-decel),
+              transform calc(0.18s * var(--speed-multiplier)) ease-out;
+}
+.demo-tab-pill.morphing {
+  transform: scaleY(0.85) scaleX(1.15);
+}
+
+/* 2. Kinetic Bubble Launch */
+.demo-chat-stage {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.demo-bubble {
+  align-self: flex-end;
+  background: var(--accent-container);
+  color: var(--accent-on-container);
+  padding: 10px 16px;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 12.5px;
+  max-width: 240px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transform-origin: bottom right;
+}
+.demo-bubble.launching {
+  animation: bubbleFly calc(0.5s * var(--speed-multiplier)) var(--ease-emphasized-decel) forwards;
+}
+@keyframes bubbleFly {
+  0% { opacity: 0; transform: translateY(40px) scale(0.65, 1.4); }
+  60% { opacity: 1; transform: translateY(-6px) scale(1.08, 0.94); }
+  85% { transform: translateY(2px) scale(0.98, 1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1, 1); }
+}
+
+/* 3. Shared-Element Media Zoom */
+.demo-media-thumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b3835, #255b58);
+  border: 1px solid var(--border-active);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+  transition: all calc(0.4s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.demo-media-thumb.fullscreen {
+  width: 260px;
+  height: 140px;
+  border-radius: 4px;
+  box-shadow: 0 0 35px rgba(155, 208, 204, 0.35);
+}
+
+/* 4. Rubber-band Overscroll */
+.demo-scroll-wrap {
+  width: 240px;
+  height: 140px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #101616;
+}
+.demo-scroll-content {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform calc(0.4s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.demo-scroll-item {
+  background: #192221;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.demo-scroll-content.overscroll {
+  transform: translateY(32px);
+}
+
+/* 5. 3D Tilt & Specular Card */
+.demo-card-tilt {
+  width: 280px;
+  padding: 12px 16px;
+  background: #182221;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform calc(0.25s * var(--speed-multiplier)) ease-out, box-shadow calc(0.25s * var(--speed-multiplier)) ease-out;
+}
+.demo-card-tilt:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 0 16px rgba(155, 208, 204, 0.15);
+}
+.demo-card-glare {
+  position: absolute;
+  top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.demo-card-tilt:hover .demo-card-glare {
+  animation: glarePass calc(0.8s * var(--speed-multiplier)) ease-in-out;
+}
+@keyframes glarePass {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* 6. Dynamic Island Pill */
+.demo-dynamic-island {
+  background: #0f1716;
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all calc(0.4s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.demo-dynamic-island.expanded {
+  padding: 12px 20px;
+  border-radius: 16px;
+  background: #14201e;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(155, 208, 204, 0.25);
+}
+.wave-bar {
+  width: 3px;
+  height: 14px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: waveBar 0.8s infinite ease-in-out alternate;
+}
+.wave-bar:nth-child(2) { animation-delay: 0.2s; height: 18px; }
+.wave-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
+@keyframes waveBar {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1.3); }
+}
+
+/* 7. Organic Voice Waveform */
+.demo-voice-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.demo-mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: #051c1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+}
+.demo-mic-btn::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: rgba(155, 208, 204, 0.25);
+  animation: pulseAura calc(1.4s * var(--speed-multiplier)) infinite;
+}
+@keyframes pulseAura {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.voice-wave {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.voice-node {
+  width: 3.5px;
+  height: 16px;
+  background: var(--accent-primary);
+  border-radius: 3px;
+  animation: voiceDance calc(0.6s * var(--speed-multiplier)) infinite alternate ease-in-out;
+}
+
+/* 8. Particle Emoji Reactions */
+.demo-reaction-wrap {
+  position: relative;
+}
+.demo-reaction-btn {
+  font-size: 28px;
+  background: #182423;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.demo-reaction-btn:hover {
+  transform: scale(1.2);
+}
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+.demo-reaction-wrap.popping .particle {
+  animation: particleBurst calc(0.6s * var(--speed-multiplier)) ease-out forwards;
+}
+@keyframes particleBurst {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+}
+
+/* 9. Odometer Digit Flip */
+.odometer {
+  display: inline-flex;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent-primary);
+  line-height: 34px;
+  height: 34px;
+  overflow: hidden;
+  background: #121c1a;
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-active);
+}
+.digit-reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform calc(0.6s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+
+/* 10. SVG Tick Draw */
+.tick-svg {
+  width: 50px;
+  height: 50px;
+}
+.tick-path {
+  fill: none;
+  stroke: var(--accent-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+}
+.tick-svg.draw .tick-path-1 {
+  animation: drawStroke calc(0.4s * var(--speed-multiplier)) ease forwards;
+}
+.tick-svg.draw .tick-path-2 {
+  animation: drawStroke calc(0.4s * var(--speed-multiplier)) 0.2s ease forwards;
+}
+@keyframes drawStroke {
+  to { stroke-dashoffset: 0; }
+}
+
+/* 11. Liquid Sliding Menu */
+.demo-menu {
+  width: 220px;
+  background: #141f1e;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 6px;
+  position: relative;
+}
+.menu-item {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-main);
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.menu-cursor {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 32px;
+  background: var(--accent-container);
+  border-radius: 8px;
+  z-index: 1;
+  transition: top calc(0.25s * var(--speed-multiplier)) var(--ease-emphasized-decel),
+              opacity 0.2s;
+  pointer-events: none;
+}
+
+/* 12. Swipe to Reply Sling */
+.demo-swipe-box {
+  width: 260px;
+  background: #182422;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+  transition: transform calc(0.35s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.demo-swipe-box.swiped {
+  transform: translateX(-40px);
+}
+.reply-arrow {
+  color: var(--accent-primary);
+  font-size: 16px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all calc(0.3s * var(--speed-multiplier)) ease;
+}
+.demo-swipe-box.swiped .reply-arrow {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* 13. Accordion Cascade Header */
+.demo-accordion {
+  width: 280px;
+  background: #16201f;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+.accordion-header {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height calc(0.4s * var(--speed-multiplier)) var(--ease-emphasized-decel), padding calc(0.4s * var(--speed-multiplier)) ease;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: #111818;
+}
+.accordion-content.open {
+  max-height: 80px;
+  padding: 10px 14px;
+}
+
+/* 14. Morphing FAB */
+.demo-fab {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-primary);
+  color: #051a19;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  transition: all calc(0.4s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.demo-fab.expanded {
+  width: 130px;
+  border-radius: 24px;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* 15. Breathing Ambient Glow Input */
+.demo-input-glow {
+  width: 260px;
+  background: #111a19;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-main);
+  font-size: 13px;
+  outline: none;
+  transition: all calc(0.3s * var(--speed-multiplier)) ease;
+}
+.demo-input-glow:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(155, 208, 204, 0.45), 0 0 6px rgba(155, 208, 204, 0.8);
+  animation: ambientBreathe calc(2.2s * var(--speed-multiplier)) infinite alternate ease-in-out;
+}
+@keyframes ambientBreathe {
+  0% { box-shadow: 0 0 12px rgba(155, 208, 204, 0.25); }
+  100% { box-shadow: 0 0 26px rgba(155, 208, 204, 0.55); }
+}
+
+/* 16. Holographic Shimmer */
+.demo-shimmer-box {
+  width: 220px;
+  height: 100px;
+  background: #162221;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.demo-shimmer-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(155, 208, 204, 0.22), transparent);
+  animation: shimmerSweep calc(1.4s * var(--speed-multiplier)) infinite;
+}
+@keyframes shimmerSweep {
+  100% { transform: translateX(100%); }
+}
+
+/* 17. Parallax Chat Switch */
+.demo-chat-switch-wrap {
+  width: 260px;
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0f1616;
+}
+.chat-page {
+  position: absolute;
+  inset: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all calc(0.5s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.chat-page-1 {
+  transform: translateX(0);
+  opacity: 1;
+}
+.chat-page-2 {
+  transform: translateX(100%) scale(0.95);
+  opacity: 0;
+}
+.demo-chat-switch-wrap.switched .chat-page-1 {
+  transform: translateX(-30%) scale(0.92);
+  opacity: 0;
+}
+.demo-chat-switch-wrap.switched .chat-page-2 {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+/* 18. Staggered Waterfall Stickers */
+.demo-sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 220px;
+}
+.sticker-item {
+  height: 40px;
+  background: #1b2726;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transform: scale(0);
+  opacity: 0;
+}
+.demo-sticker-grid.open .sticker-item {
+  animation: popInSticker calc(0.35s * var(--speed-multiplier)) var(--ease-emphasized-decel) forwards;
+}
+@keyframes popInSticker {
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 19. Vortex Drag & Drop */
+.demo-drop-zone {
+  width: 240px;
+  height: 120px;
+  border: 2px dashed rgba(155, 208, 204, 0.3);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all calc(0.35s * var(--speed-multiplier)) var(--ease-emphasized-decel);
+}
+.demo-drop-zone.active {
+  border-color: var(--accent-primary);
+  background: rgba(37, 91, 88, 0.25);
+  transform: scale(0.95);
+  box-shadow: inset 0 0 25px rgba(155, 208, 204, 0.3);
+}
+
+/* 20. Vaporize Ghost Delete */
+.demo-vapor-bubble {
+  background: var(--accent-container);
+  color: var(--accent-on-container);
+  padding: 10px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  transition: all calc(0.5s * var(--speed-multiplier)) var(--ease-emphasized-accel);
+}
+.demo-vapor-bubble.vaporized {
+  opacity: 0;
+  transform: scaleX(0.2) scaleY(0.05);
+  filter: blur(8px) brightness(2);
+}
+
+/* Curated motion studies */
+.review { max-width: 1380px; margin: 0 auto 24px; padding: 22px 24px; border: 1px solid var(--border-active); border-radius: var(--radius-lg); background: linear-gradient(120deg, #182d2b, #121817 65%); }
+.review h2 { font-size: 18px; margin-bottom: 8px; }
+.review p { color: #c0d3d1; font-size: 13px; line-height: 1.6; max-width: 1000px; }
+.review p + p { margin-top: 8px; }
+.study-stage { height: 220px; background: radial-gradient(ellipse at 50% 120%, #1b3935, #0b1211 70%); }
+.study-window { width: min(88%, 330px); height: 166px; border: 1px solid #34504c; border-radius: 14px; background: #101b1a; overflow: hidden; position: relative; box-shadow: 0 14px 35px #0006; }
+.study-head { height: 34px; padding: 9px 12px; color: #a4c8c3; font-size: 11px; border-bottom: 1px solid #ffffff0c; }
+.study-content { padding: 12px; }
+.study-bubble { width: fit-content; max-width: 85%; padding: 9px 12px; color: #d6ebe7; background: #253e3a; border-radius: 12px 12px 12px 3px; font-size: 12px; }
+.study-composer { position: absolute; bottom: 10px; left: 10px; right: 10px; height: 31px; background: #20302e; border-radius: 9px; display: flex; align-items: center; padding: 0 10px; color: #769b95; font-size: 11px; }
+.study-send { margin-left: auto; border: 0; border-radius: 50%; width: 24px; height: 24px; background: #9bd0cc; color: #13312d; cursor: pointer; }
+.study-outgoing { position: absolute; right: 12px; bottom: 51px; background: #376b61; border-radius: 12px 12px 3px 12px; opacity: 0; transform: translateY(20px) scale(.96); transform-origin: bottom right; }
+.study-window.sent .study-outgoing { opacity: 1; transform: none; transition: opacity calc(.16s * var(--speed-multiplier)), transform calc(.32s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1); }
+.study-tick { display: inline-block; margin-left: 5px; color: #a6e5d6; opacity: 0; transform: translateY(3px); transition: opacity calc(.18s * var(--speed-multiplier)) calc(.25s * var(--speed-multiplier)), transform calc(.18s * var(--speed-multiplier)) calc(.25s * var(--speed-multiplier)); }
+.sent .study-tick { opacity: 1; transform: none; }
+.reply-source { cursor: grab; touch-action: pan-y; transition: transform calc(.25s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1); position: relative; z-index: 1; }
+.reply-source.dragging { transition: none; cursor: grabbing; }
+.reply-hint { position: absolute; top: 56px; left: 18px; color: #9bd0cc; opacity: 0; transform: scale(.5); }
+.reply-composer { transform: translateY(35px); opacity: 0; transition: transform calc(.28s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1), opacity calc(.2s * var(--speed-multiplier)); }
+.replied .reply-composer { transform: none; opacity: 1; }
+.reaction-study { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.reaction-chip { border: 1px solid #54847c; background: #254e46; color: #d4eee8; border-radius: 20px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+.reaction-chip.pulse { animation: chip-pop calc(.38s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1); }
+@keyframes chip-pop { 35% { transform: scale(1.16); } 70% { transform: scale(.97); } }
+.reaction-note { color: #82a29c; font-size: 11px; }
+.search-list { padding: 8px 12px; }
+.search-row { display: flex; gap: 9px; align-items: center; padding: 6px; border-radius: 7px; color: #bad1ce; font-size: 11px; transition: transform calc(.3s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1), opacity calc(.2s * var(--speed-multiplier)), background calc(.2s * var(--speed-multiplier)); }
+.search-row::before { content: ''; width: 24px; height: 24px; flex: none; border-radius: 50%; background: #3e6960; }
+.searching .search-row.muted { opacity: .15; transform: translateX(12px); }
+.searching .search-row.match { background: #294740; transform: translateY(-36px); }
+.study-caption { position: absolute; bottom: 7px; right: 12px; font-size: 10px; color: #84a69f; }
+button:focus-visible, [tabindex]:focus-visible { outline: 2px solid #b8ede9; outline-offset: 3px; }
+@media (max-width: 520px) { body { padding: 20px 12px 150px; } .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; } .card { padding: 16px; } .sticky-footer { bottom: 10px; width: calc(100% - 24px); border-radius: 16px; padding: 10px; justify-content: space-between; gap: 8px; } .footer-stat { font-size: 11px; gap: 7px; } .btn-copy { padding: 9px; font-size: 11px; } .demo-tabs { max-width: 100%; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important; } }
+
+
+/* Remade interaction studies */
+.motion-stage { height: 240px; background: radial-gradient(ellipse at 50% 120%, #25443d 0%, #101b19 56%, #0a1211 100%); }
+.motion-phone { position: relative; width: min(84%, 330px); height: 196px; overflow: hidden; background: #111e1c; border: 1px solid #42645b; border-radius: 15px; box-shadow: 0 16px 32px #0008, inset 0 1px #ffffff0c; }
+.motion-top { display:flex; align-items:center; gap:9px; height:42px; padding:7px 12px; border-bottom:1px solid #ffffff0b; font-size:11px; }
+.motion-top b,.motion-top small,.media-label b,.media-label small { display:block; } .motion-top small,.media-label small { margin-top:2px; font-size:9px; color:#82a69e; }
+.motion-avatar,.focus-avatar { display:grid; place-items:center; width:27px; height:27px; flex:none; border-radius:50%; color:#d9f4ea; font-weight:700; background:linear-gradient(145deg,#6d9f8d,#305f57); }
+.motion-avatar.alt {background:linear-gradient(145deg,#a1a67e,#4f6853)} .motion-top-icon {margin-left:auto;color:#77968e;font-size:18px}
+.send-history { padding:12px; } .motion-msg { width:max-content; max-width:90%; padding:8px 10px; border-radius:11px 11px 11px 3px; background:#243b37; font-size:11px; color:#d8ebe6; }
+.send-history .incoming {transition:transform calc(.34s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1)} .send-scene.sending .incoming {transform:translateY(-5px)}
+.motion-msg.outgoing { position:absolute; right:12px; bottom:53px; border-radius:11px 11px 3px 11px; background:#396f61; opacity:0; transform:translateY(28px) scale(.94); transform-origin:bottom right; }
+.motion-msg.outgoing span { color:#b8e9da; font-size:10px; margin-left:5px; }
+.send-scene.sending .outgoing { animation:send-arrive calc(.48s * var(--speed-multiplier)) cubic-bezier(.2,.75,.2,1) both; }
+.send-scene.sending .send-composer { animation: composer-flash calc(.48s * var(--speed-multiplier)) ease-out; }
+@keyframes composer-flash { 25% { box-shadow: 0 0 14px #91dfc966; } 100% { box-shadow: none; } }
+@keyframes send-arrive { 0%{opacity:0;transform:translateY(27px) scale(.94)} 20%{opacity:1} 70%{transform:translateY(-2px) scale(1.01)} 100%{opacity:1;transform:none} }
+.send-composer { position:absolute;bottom:10px;left:10px;right:10px;height:34px;display:flex;align-items:center;padding:0 5px 0 10px;border-radius:10px;background:#203430;color:#c8e1da;font-size:10px; }
+.send-composer span { transition:opacity calc(.12s * var(--speed-multiplier)); } .sending .send-composer span{opacity:.3} .send-composer button,.voice-record { margin-left:auto;border:0;width:25px;height:25px;border-radius:50%;background:#a2d7c9;color:#163a32;cursor:pointer; }
+.focus-heading {height:37px;padding:12px 13px 5px;font-size:11px;font-weight:700}.focus-heading span{float:right;color:#7fa59a}.focus-list {position:relative;padding:0 8px;--x:50%;--y:50%}
+.focus-indicator {position:absolute;z-index:0;top:0;left:8px;right:8px;height:48px;border-radius:10px;background:linear-gradient(100deg,#345e53,#24413a);border:1px solid #82b7a055;box-shadow:0 6px 15px #0003;transition:transform calc(.38s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1)}
+.focus-row {position:relative;width:100%;height:48px;display:flex;align-items:center;gap:9px;border:0;border-radius:10px;padding:6px 8px;color:#dcefe9;text-align:left;background:transparent;cursor:pointer}
+.focus-row:hover {background:radial-gradient(circle at var(--x) var(--y),#a9f4d720,transparent 65%)} .focus-avatar{width:31px;height:31px}.focus-avatar.b{background:linear-gradient(140deg,#a6a474,#5e6d4e)} .focus-avatar.c{background:linear-gradient(140deg,#9a849c,#58556b)} .focus-copy{flex:1;min-width:0}.focus-copy b,.focus-copy small{display:block;font-size:10px}.focus-copy small{color:#8ca9a1;font-size:9px;margin-top:3px}.focus-meta{align-self:flex-start;font-size:9px;color:#8eaaa1}.focus-meta i{display:block;width:16px;height:16px;border-radius:50%;background:#a3d5c3;color:#17362e;text-align:center;line-height:16px;font-style:normal;margin:4px 0 0 auto}
+.media-backdrop {padding:12px 13px;color:#7fa198;font-size:9px}.media-backdrop b,.media-backdrop small {display:block}.media-backdrop b{margin-top:10px;color:#d5e9e3;font-size:11px}.media-backdrop small{margin-top:3px}
+.media-capsule {position:absolute;left:12px;right:12px;bottom:12px;height:52px;border:1px solid #79ae9c66;border-radius:17px;background:linear-gradient(120deg,#2a4a40,#172b26);box-shadow:0 8px 20px #0007;overflow:hidden;transition:height calc(.4s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1),border-radius calc(.4s * var(--speed-multiplier))}
+.media-capsule.open{height:132px;border-radius:16px}.media-summary{height:50px;width:100%;display:flex;align-items:center;gap:9px;padding:7px;border:0;background:none;color:#e1f2ea;text-align:left;cursor:pointer}.album-art{width:35px;height:35px;display:grid;place-items:center;border-radius:9px;background:linear-gradient(145deg,#d6b791,#607d70 52%,#29453d);font-size:18px;color:#eaf9e7}.media-label{flex:1;font-size:10px}.media-eq{height:18px;display:flex;align-items:center;gap:2px}.media-eq i{height:12px;width:2px;background:#a6dec7;border-radius:2px;animation:eq calc(.7s * var(--speed-multiplier)) ease-in-out infinite alternate}.media-eq i:nth-child(2){animation-delay:-.3s;height:17px}.media-eq i:nth-child(3){animation-delay:-.5s;height:9px}.media-eq i:nth-child(4){animation-delay:-.15s;height:14px}.media-capsule.paused .media-eq i {animation-play-state:paused}.media-chevron{font-size:15px;color:#a8c7bd;transition:transform calc(.3s * var(--speed-multiplier))}.open .media-chevron{transform:rotate(180deg)}@keyframes eq{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+.media-details{padding:0 12px;opacity:0;transform:translateY(8px);transition:opacity calc(.2s * var(--speed-multiplier)),transform calc(.3s * var(--speed-multiplier));pointer-events:none}.open .media-details{opacity:1;transform:none;pointer-events:auto}.media-progress{height:3px;background:#ffffff30;border-radius:4px;margin:4px 0}.media-progress i{display:block;width:36%;height:100%;background:#b9e8d6;border-radius:4px}.media-times{display:flex;justify-content:space-between;font-size:8px;color:#9ebeb4}.media-controls{display:flex;justify-content:center;align-items:center;gap:30px;font-size:10px;color:#b5d1c7}.media-controls button{width:27px;height:27px;border:0;border-radius:50%;background:#c8eddd;color:#23473b;cursor:pointer;font-weight:bold}
+.voice-copy{padding:25px 16px;color:#b6cfc6;font-size:11px}.voice-copy span{color:#8ac7b2}.voice-ribbon{position:absolute;left:10px;right:10px;bottom:10px;height:47px;display:flex;align-items:center;gap:9px;padding:6px 9px;background:#213a33;border:1px solid #5d8c7c55;border-radius:13px;transition:background calc(.3s * var(--speed-multiplier))}.voice-scene.recording .voice-ribbon{background:#2d5549}.voice-record{margin:0;width:32px;height:32px;flex:none;font-size:13px}.recording .voice-record{background:#edaaa0;color:#4d2421}.recording .voice-record span{display:inline-block;width:9px;height:9px;background:currentColor;border-radius:2px;font-size:0}.voice-idle b,.voice-idle small{display:block;font-size:10px}.voice-idle small{font-size:9px;color:#91b4a8;margin-top:3px}.voice-active{display:none;align-items:center;gap:8px;flex:1;min-width:0}.recording .voice-idle{display:none}.recording .voice-active{display:flex}.voice-time,.voice-live{font-size:9px;color:#d7ece4}.voice-live{color:#f4b2aa;font-weight:bold}.voice-bars{display:flex;align-items:center;justify-content:center;gap:3px;flex:1;height:24px;overflow:hidden}.voice-bars i{width:3px;height:var(--h);background:#b5e5d1;border-radius:4px;animation:voiceBar calc(.65s * var(--speed-multiplier)) ease-in-out infinite alternate;animation-delay:var(--delay)}@keyframes voiceBar{from{transform:scaleY(.3);opacity:.6}to{transform:scaleY(1);opacity:1}}
+.react-message{margin:19px 12px 0;width:max-content;max-width:90%;padding:10px 12px;background:#29423b;border-radius:12px 12px 12px 3px;color:#dbeee7;font-size:10px}.react-area{display:flex;align-items:center;gap:10px;margin:8px 13px}.react-caption{color:#81a79a;font-size:9px}.react-chip{position:relative;display:flex;align-items:center;gap:5px;border:1px solid #6ea79466;border-radius:20px;padding:5px 10px;background:#223e35;color:#c8e9db;cursor:pointer;font-size:11px;transition:background calc(.2s * var(--speed-multiplier)),border-color calc(.2s * var(--speed-multiplier))}.react-chip[aria-pressed=true]{background:#416e5d;border-color:#a4e8c8}.react-heart{font-size:15px;color:#b2e7ca}.react-chip.bloom .react-heart{animation:heartBloom calc(.48s * var(--speed-multiplier)) cubic-bezier(.2,.8,.2,1)}@keyframes heartBloom{35%{transform:scale(1.5) rotate(-12deg)}70%{transform:scale(.9) rotate(4deg)}100%{transform:none}}.react-spark{position:absolute;left:50%;top:50%;opacity:0;pointer-events:none;color:#ccf8d6}.bloom .react-spark{animation:sparkOrbit calc(.55s * var(--speed-multiplier)) ease-out forwards}.s1{--dx:-27px;--dy:-19px}.s2{--dx:20px;--dy:-23px}.s3{--dx:32px;--dy:1px}.s4{--dx:-24px;--dy:13px}@keyframes sparkOrbit{0%{opacity:0;transform:translate(0,0) scale(.2)}25%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.7)}}
+.receipt-bubble{position:absolute;right:12px;top:63px;padding:11px 12px 8px;border-radius:12px 12px 3px 12px;background:#396b5d;font-size:10px;color:#e1f1eb}.receipt-meta{display:flex;align-items:center;justify-content:flex-end;gap:3px;margin-top:5px;color:#b8dbce;font-size:9px}.receipt-checks{width:25px;height:16px;overflow:visible}.receipt-checks path{fill:none;stroke:#b9f1d6;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.receipt-second{stroke-dasharray:22;stroke-dashoffset:22;transition:stroke-dashoffset calc(.36s * var(--speed-multiplier)) ease}.receipt-scene.read .receipt-second{stroke-dashoffset:0}.receipt-scene.read .receipt-checks{animation:receiptPop calc(.4s * var(--speed-multiplier)) ease}@keyframes receiptPop{40%{transform:scale(1.18)}100%{transform:none}}.receipt-action{position:absolute;left:12px;bottom:12px;border:1px solid #76a79777;background:#274a3f;color:#c9ecdc;border-radius:8px;padding:7px 9px;cursor:pointer;font-size:9px}.receipt-label{position:absolute;right:13px;bottom:20px;color:#a3c7b7;font-size:9px}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge-mint">Caelestia Hyprland Expressive Motion Lab</div>
+  <h1>Motion Lab для Telegram Desktop</h1>
+  <p class="subtitle">
+    Порівнюйте інтерактивні концепти, сповільнюйте рух та голосуйте за ідеї для реалізації. Перші чотири — нові пропозиції; шість оригінальних концептів переосмислено.
+  </p>
+</header>
+
+<section class="review" aria-label="Огляд руху">
+  <h2>Напрямок: виразно, але спокійно</h2>
+  <p><strong>Варто розвивати:</strong> shared-element медіа (#03), переміщення індикатора вкладок (#01) та стани статусу (#10) — вони пояснюють, що змінилося. Нижче — чотири додаткові концепти для повсякденних дій.</p>
+  <p><strong>Зменшити інтенсивність:</strong> постійне неонове дихання (#15) і випаровування (#20) швидко втомлюють. Краще короткий рух, який можна перервати, без затримки дії. Орієнтир: 150–350 мс; reduced motion має прибирати просторовий рух. Файли на картках — запропоновані точки інтеграції, їх потрібно перевірити в коді.</p>
+</section>
+
+<div class="toolbar">
+  <div class="filter-group">
+    <button class="btn-filter active" data-filter="all">Всі (20)</button>
+    <button class="btn-filter" data-filter="chat">Чат та Бульбашки (7)</button>
+    <button class="btn-filter" data-filter="nav">Навігація & Меню (5)</button>
+    <button class="btn-filter" data-filter="media">Медіа & Дзвінки (4)</button>
+    <button class="btn-filter" data-filter="micro">Мікровзаємодії (4)</button>
+  </div>
+  <div class="speed-control">
+    <span>Швидкість симуляції:</span>
+    <button class="speed-btn active" data-speed="1">1.0x</button>
+    <button class="speed-btn" data-speed="2">0.5x (Slow)</button>
+    <button class="speed-btn" data-speed="4">0.25x (Matrix)</button>
+  </div>
+</div>
+
+<div class="grid" id="cardsGrid">
+
+  <div class="card" data-cat="chat" id="anim-21">
+    <div class="card-header"><div><span class="card-num">#21 • Нове / Чат</span><h3 class="card-title">Composer → Message</h3></div><div class="card-tags"><span class="tag">250–320 ms</span><span class="tag">Continuity</span></div></div>
+    <div class="demo-stage study-stage"><div class="study-window" id="studySend"><div class="study-head">✦ &nbsp; Олександра</div><div class="study-content"><div class="study-bubble">Давай зробимо щось красиве ✨</div></div><div class="study-bubble study-outgoing">Вже працюю над цим <span class="study-tick">✓✓</span></div><div class="study-composer">Повідомлення <button class="study-send" onclick="sendStudy()" aria-label="Надіслати повідомлення">➤</button></div></div></div>
+    <p class="card-desc">Натисніть стрілку: повідомлення з'являється біля поля вводу і займає своє місце, а статус приходить трохи пізніше. Рух короткий і не заважає швидкому набору.</p><div class="card-code">Ідея: відправлення повідомлення та статус доставки</div><div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(21, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(21, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+  <div class="card" data-cat="chat" id="anim-22">
+    <div class="card-header"><div><span class="card-num">#22 • Нове / Чат</span><h3 class="card-title">Tethered Reply</h3></div><div class="card-tags"><span class="tag">Direct manipulation</span><span class="tag">Threshold</span></div></div>
+    <div class="demo-stage study-stage"><button class="demo-trigger" onclick="replyStudy()">Відповісти</button><div class="study-window" id="studyReply"><div class="study-head">✦ &nbsp; Олександра</div><span class="reply-hint" id="replyHint">↩</span><div class="study-content"><div class="study-bubble reply-source" id="replySource" tabindex="0" role="button" aria-label="Перетягніть вправо або натисніть Enter, щоб відповісти">Потягни мене вправо ↗</div></div><div class="study-composer reply-composer">↩ &nbsp; Відповідь на повідомлення</div><span class="study-caption">Перетягніть вправо · або натисніть кнопку</span></div></div>
+    <p class="card-desc">Бульбашка слідує за пальцем або курсором з опором, стрілка показує поріг. Після відпускання відкривається цитата; короткий жест повертає повідомлення назад.</p><div class="card-code">Ідея: жест відповіді та панель цитування</div><div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(22, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(22, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+  <div class="card" data-cat="micro" id="anim-23">
+    <div class="card-header"><div><span class="card-num">#23 • Нове / Мікро</span><h3 class="card-title">Reaction Bloom</h3></div><div class="card-tags"><span class="tag">180–380 ms</span><span class="tag">Stateful</span></div></div>
+    <div class="demo-stage study-stage"><div class="study-window"><div class="study-head">✦ &nbsp; Дизайн-команда</div><div class="study-content"><div class="study-bubble">Ось цей варіант — саме те!</div><div class="reaction-study"><button class="reaction-chip" id="studyReaction" onclick="reactionStudy()" aria-pressed="false">♥ <span id="reactionCount">12</span></button><span class="reaction-note">Натисніть реакцію</span></div></div></div></div>
+    <p class="card-desc">Замість феєрверку — один пружний акцент у місці дії. Лічильник змінюється одразу, повторне натискання скасовує реакцію; рух не перекриває текст.</p><div class="card-code">Ідея: стан реакції та лічильник</div><div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(23, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(23, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+  <div class="card" data-cat="nav" id="anim-24">
+    <div class="card-header"><div><span class="card-num">#24 • Нове / Навігація</span><h3 class="card-title">Search Focus</h3></div><div class="card-tags"><span class="tag">Spatial continuity</span><span class="tag">Interruptible</span></div></div>
+    <div class="demo-stage study-stage"><button class="demo-trigger" onclick="searchStudy()">Пошук / Назад</button><div class="study-window" id="studySearch"><div class="study-head" id="searchHead">⌕ &nbsp; Пошук чатів</div><div class="search-list"><div class="search-row muted">Андрій &nbsp; · &nbsp; Побачимось завтра</div><div class="search-row match">Олександра &nbsp; · &nbsp; Чудова ідея</div><div class="search-row muted">Дизайн-команда &nbsp; · &nbsp; Новий макет</div></div></div></div>
+    <p class="card-desc">Пошук зберігає відчуття місця: зайві рядки стихають, а знайдений чат переміщується у верхню позицію. При поверненні список збирається назад.</p><div class="card-code">Ідея: перехід між списком чатів і результатами пошуку</div><div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(24, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(24, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+
+  <!-- 1. Liquid Elastic Tab Bar -->
+  <div class="card" data-cat="nav" id="anim-1">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#01 • Навігація</span>
+        <h3 class="card-title">Liquid Elastic Tab Bar</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Spring Physics</span>
+        <span class="tag">Morphing</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo1()">Клік для тесту</button>
+      <div class="demo-tabs">
+        <div class="demo-tab-pill" id="tabPill" style="left: 4px; width: 98px;"></div>
+        <div class="demo-tab-btn active" onclick="switchTab(0)">Усі чати</div>
+        <div class="demo-tab-btn" onclick="switchTab(1)">Особисті</div>
+        <div class="demo-tab-btn" onclick="switchTab(2)">Канали</div>
+      </div>
+    </div>
+    <p class="card-desc">
+      Активна капсула папок чатів не перескакує різко, а еластично розтягується як крапля ртуті між вкладками з пружним відскоком (spring snap) на фініші.
+    </p>
+    <div class="card-code">ui/widgets/chat_filters_tabs_strip.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(1, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(1, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 2. Kinetic Bubble Launch -->
+  <div class="card" data-cat="chat" id="anim-2">
+    <div class="card-header"><div><span class="card-num">#02 • Чат / REMAKE</span><h3 class="card-title">Message Trail</h3></div><div class="card-tags"><span class="tag">280–420 ms</span><span class="tag">Composer continuity</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone send-scene" id="sendScene"><div class="motion-top"><span class="motion-avatar">А</span><span><b>Александра</b><small>була нещодавно</small></span><span class="motion-top-icon">⋯</span></div><div class="send-history"><div class="motion-msg incoming">Готово до запуску? ✨</div><div class="motion-msg outgoing" id="sendBubble">Так, виглядає чудово <span>✓</span></div></div><div class="send-composer"><span id="sendDraft">Так, виглядає чудово</span><button onclick="runDemo2()" aria-label="Надіслати повідомлення">➤</button></div></div></div>
+    <p class="card-desc">Натисніть стрілку: текст піднімається з поля вводу, збирається у бульбашку, а попереднє повідомлення м’яко поступається місцем. Короткий світловий акцент супроводжує відправлення; повторний клік запускає сцену знову.</p>
+    <div class="card-code">history/view/history_view_list_widget.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(2, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(2, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 3. Shared-Element Media Zoom -->
+  <div class="card" data-cat="media" id="anim-3">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#03 • Медіа</span>
+        <h3 class="card-title">Shared-Element Media Zoom</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Seamless Zoom</span>
+        <span class="tag">macOS Swift Style</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo3()">Згорнути / Розгорнути</button>
+      <div class="demo-media-thumb" id="mediaThumb" onclick="runDemo3()">🖼️</div>
+    </div>
+    <p class="card-desc">
+      Клік по фото/відео безшовно розгортає його на весь екран прямо з форми бульбашки без чорного миготіння екрану, з плавною зміною радіуса скруглення кутів.
+    </p>
+    <div class="card-code">media/view/media_view_overlay_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(3, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(3, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 4. Rubber-band Inertial Overscroll -->
+  <div class="card" data-cat="chat" id="anim-4">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#04 • Чат</span>
+        <h3 class="card-title">Rubber-band Overscroll</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Inertia</span>
+        <span class="tag">Elastic Spring</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo4()">Потягнути край</button>
+      <div class="demo-scroll-wrap">
+        <div class="demo-scroll-content" id="scrollContent">
+          <div class="demo-scroll-item">Повідомлення 1</div>
+          <div class="demo-scroll-item">Повідомлення 2</div>
+          <div class="demo-scroll-item">Повідомлення 3 (Кінець списку)</div>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">
+      При досягненні самого низу або верху чат не б'ється об стіну, а пружно розтягується під дією інерції мишки та плавно повертається назад із загасанням.
+    </p>
+    <div class="card-code">ui/widgets/scroll_area.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(4, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(4, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 5. 3D Tilt & Specular Light Cards -->
+  <div class="card" data-cat="nav" id="anim-5">
+    <div class="card-header"><div><span class="card-num">#05 • Навігація / REMAKE</span><h3 class="card-title">Magnetic Chat Focus</h3></div><div class="card-tags"><span class="tag">Pointer light</span><span class="tag">Selection</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone focus-scene" id="focusScene"><div class="focus-heading">Повідомлення <span>⌕ &nbsp; ⋯</span></div><div class="focus-list" id="focusList"><div class="focus-indicator" id="focusIndicator"></div><button class="focus-row selected" onclick="selectFocus(0)"><span class="focus-avatar a">А</span><span class="focus-copy"><b>Александра</b><small>Надіслала фото</small></span><span class="focus-meta">зараз <i>2</i></span></button><button class="focus-row" onclick="selectFocus(1)"><span class="focus-avatar b">D</span><span class="focus-copy"><b>Design team</b><small>Дуже красиво ✨</small></span><span class="focus-meta">12:42</span></button><button class="focus-row" onclick="selectFocus(2)"><span class="focus-avatar c">М</span><span class="focus-copy"><b>Максим</b><small>До зустрічі!</small></span><span class="focus-meta">вчора</span></button></div></div></div>
+    <p class="card-desc">Наведіть курсор і виберіть чат: делікатне світло йде за курсором, а підсвічування безперервно перетікає між рядками. Ніякого нахилу тексту — список лишається чітким і спокійним.</p>
+    <div class="card-code">dialogs/ui/dialogs_layout.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(5, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(5, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 6. Dynamic Island Audio & Call Pill -->
+  <div class="card" data-cat="media" id="anim-6">
+    <div class="card-header"><div><span class="card-num">#06 • Медіа / REMAKE</span><h3 class="card-title">Living Media Capsule</h3></div><div class="card-tags"><span class="tag">Morph</span><span class="tag">Playback state</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone media-scene"><div class="media-backdrop"><span>● ● ●</span><b>Вечірній плейлист</b><small>Музика для зосередженості</small></div><div class="media-capsule" id="mediaCapsule"><button class="media-summary" onclick="toggleMedia()" aria-expanded="false" id="mediaExpand"><span class="album-art">✦</span><span class="media-label"><b>Afterglow</b><small>Caelestia Radio</small></span><span class="media-eq"><i></i><i></i><i></i><i></i></span><span class="media-chevron">⌄</span></button><div class="media-details"><div class="media-progress"><i></i></div><div class="media-times"><span>1:24</span><span>3:48</span></div><div class="media-controls"><span>↶ 15</span><button onclick="togglePlayback()" id="mediaPlay" aria-label="Поставити на паузу">Ⅱ</button><span>15 ↷</span></div></div></div></div></div>
+    <p class="card-desc">Натисніть на компактний плеєр: він розгортається з тієї ж форми в повноцінне керування. Пауза зупиняє еквалайзер; метадані та прогрес залишаються на місці під час морфінгу.</p>
+    <div class="card-code">media/player/media_player_panel.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(6, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(6, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 7. Organic Voice Waveform -->
+  <div class="card" data-cat="chat" id="anim-7">
+    <div class="card-header"><div><span class="card-num">#07 • Чат / REMAKE</span><h3 class="card-title">Voice Recording Ribbon</h3></div><div class="card-tags"><span class="tag">Record / stop</span><span class="tag">Simulated waveform</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone voice-scene" id="voiceScene"><div class="motion-top"><span class="motion-avatar">А</span><span><b>Александра</b><small>голосове повідомлення</small></span></div><div class="voice-copy" id="voiceCopy">Ідеї звучать краще голосом <span>↘</span></div><div class="voice-ribbon"><button class="voice-record" id="voiceRecord" onclick="toggleVoice()" aria-label="Почати запис" aria-pressed="false"><span>●</span></button><div class="voice-idle" id="voiceIdle"><b>Записати голосове</b><small>Натисніть, щоб почати</small></div><div class="voice-active"><span class="voice-time" id="voiceTime">0:00</span><div class="voice-bars" id="voiceBars"></div><span class="voice-live">REC</span></div></div></div></div>
+    <p class="card-desc">Кнопка розкриває стрічку запису з таймером і живою хвилею. Повторне натискання зупиняє сцену та повертає початковий стан. Це симуляція: мікрофон не використовується.</p>
+    <div class="card-code">history/view/controls/history_view_voice_record_bar.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(7, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(7, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 8. Explosive Particle Reactions -->
+  <div class="card" data-cat="micro" id="anim-8">
+    <div class="card-header"><div><span class="card-num">#08 • Мікро / REMAKE</span><h3 class="card-title">Constellation Reaction</h3></div><div class="card-tags"><span class="tag">Toggle state</span><span class="tag">Micro burst</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone react-scene"><div class="motion-top"><span class="motion-avatar alt">D</span><span><b>Design team</b><small>щойно</small></span></div><div class="react-message">Це саме той вайб, який ми шукали ✨</div><div class="react-area"><button class="react-chip" id="reactChip" onclick="runDemo8()" aria-pressed="false"><span class="react-heart">♥</span><span id="reactCount">42</span><span class="react-spark s1">✦</span><span class="react-spark s2">✧</span><span class="react-spark s3">•</span><span class="react-spark s4">✦</span></button><span class="react-caption">Натисніть, щоб відреагувати</span></div></div></div>
+    <p class="card-desc">Серце швидко розквітає, а кілька іскор малюють коротку орбіту навколо реакції. Лічильник змінюється одразу; повторне натискання прибирає реакцію без другого вибуху.</p>
+    <div class="card-code">history/view/reactions/history_view_reactions.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(8, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(8, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 9. Mechanical Odometer Flip Counter -->
+  <div class="card" data-cat="micro" id="anim-9">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#09 • Мікро</span>
+        <h3 class="card-title">Odometer Digit Flip</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Mechanical</span>
+        <span class="tag">Rolling Digits</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo9()">+1 Повідомлення</button>
+      <div class="odometer">
+        <span>81</span>
+        <div class="digit-reel" id="digitReel">
+          <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">
+      Зміна будь-якої цифри (непрочитані, реакції, підписники) прокручується вертикальним барабаном як у ретро-одометрі з легким моушн-блюром.
+    </p>
+    <div class="card-code">ui/unread_badge.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(9, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(9, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 10. SVG Dynamic Double-Tick Draw -->
+  <div class="card" data-cat="chat" id="anim-10">
+    <div class="card-header"><div><span class="card-num">#10 • Чат / REMAKE</span><h3 class="card-title">Sent → Read</h3></div><div class="card-tags"><span class="tag">Two-stage state</span><span class="tag">Vector detail</span></div></div>
+    <div class="demo-stage motion-stage"><div class="motion-phone receipt-scene" id="receiptScene"><div class="motion-top"><span class="motion-avatar">А</span><span><b>Александра</b><small>була нещодавно</small></span></div><div class="receipt-bubble">Побачимось зовсім скоро ✨<div class="receipt-meta"><span>12:48</span><svg class="receipt-checks" viewBox="0 0 32 20" aria-hidden="true"><path class="receipt-first" d="M3 10 l5 5 9-10"/><path class="receipt-second" d="M12 10 l5 5 9-10"/></svg></div></div><button class="receipt-action" id="receiptAction" onclick="runDemo10()">Позначити прочитаним</button><div class="receipt-label" id="receiptLabel" aria-live="polite">✓ &nbsp; Надіслано</div></div></div>
+    <p class="card-desc">Одна галочка означає відправлення. Натисніть кнопку, щоб друга плавно дописалася в момент прочитання; повторне натискання повертає початковий стан для порівняння.</p>
+    <div class="card-code">history/view/history_view_message.cpp</div>
+    <div class="card-actions"><button class="btn-vote btn-approve" onclick="vote(10, 'approve')">🔥 ХОЧУ ЦЕ</button><button class="btn-vote btn-reject" onclick="vote(10, 'reject')">💩 ХУЙНЯ</button></div>
+  </div>
+
+  <!-- 11. Liquid Sliding Cursor Menu -->
+  <div class="card" data-cat="nav" id="anim-11">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#11 • Навігація</span>
+        <h3 class="card-title">Liquid Sliding Cursor Menu</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Hover Physics</span>
+        <span class="tag">Fluid Capsule</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <div class="demo-menu" id="menuStage">
+        <div class="menu-cursor" id="menuCursor" style="top: 6px;"></div>
+        <div class="menu-item" onmouseenter="moveMenuCursor(0)">Відповісти</div>
+        <div class="menu-item" onmouseenter="moveMenuCursor(1)">Переслати</div>
+        <div class="menu-item" onmouseenter="moveMenuCursor(2)">Закріпити</div>
+        <div class="menu-item" onmouseenter="moveMenuCursor(3)">Видалити</div>
+      </div>
+    </div>
+    <p class="card-desc">
+      У меню по правому кліку підсвітка не блимає дискретно: під пунктами живе плаваюча капсула, що плавно ковзає слідом за курсором.
+    </p>
+    <div class="card-code">lib_ui/ui/widgets/popup_menu.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(11, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(11, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 12. Elastic Slingshot Swipe-to-Reply -->
+  <div class="card" data-cat="chat" id="anim-12">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#12 • Чат</span>
+        <h3 class="card-title">Elastic Slingshot Swipe-to-Reply</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Slingshot</span>
+        <span class="tag">Tension Feedback</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo12()">Свайпнути</button>
+      <div class="demo-swipe-box" id="swipeBox" onclick="runDemo12()">
+        <span>Свайпніть вліво для цитати</span>
+        <span class="reply-arrow">↩️</span>
+      </div>
+    </div>
+    <p class="card-desc">
+      Відтягування повідомлення чинить еластичний опір натягу тятиви, а при відпусканні «вистрілює» повідомлення в блок відповіді над інпутом.
+    </p>
+    <div class="card-code">history/view/history_view_list_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(12, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(12, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 13. Accordion Cascade Pinned Header -->
+  <div class="card" data-cat="nav" id="anim-13">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#13 • Навігація</span>
+        <h3 class="card-title">Accordion Cascade Pinned Bar</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Accordion</span>
+        <span class="tag">Smooth Expand</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <div class="demo-accordion">
+        <div class="accordion-header" onclick="runDemo13()">
+          <span>📌 Закріплене #3: План релізу</span>
+          <span>▼</span>
+        </div>
+        <div class="accordion-content" id="accordionContent">
+          Повний текст закріпленого повідомлення з плавним вертикальним розкриттям без стрибків висоти.
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">
+      Клік на закріплені повідомлення розкриває їх м'яким каскадним віялом, а перемикання між ними має плавний вертикальний морфінг.
+    </p>
+    <div class="card-code">history/view/controls/history_view_pinned_bar.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(13, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(13, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 14. Morphing Floating Action Button -->
+  <div class="card" data-cat="nav" id="anim-14">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#14 • Навігація</span>
+        <h3 class="card-title">Morphing Floating Button</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Morph FAB</span>
+        <span class="tag">Pill Expansion</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo14()">Морфінг</button>
+      <div class="demo-fab" id="fabBtn" onclick="runDemo14()">
+        <span>⬇️</span>
+        <span id="fabText" style="display:none;">3 нових</span>
+      </div>
+    </div>
+    <p class="card-desc">
+      Кнопка скролу вниз виростає з правого краю чату, пульсує при надходженні нового тексту та морфиться в пігулку з лічильником.
+    </p>
+    <div class="card-code">history/history_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(14, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(14, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 15. Breathing Ambient Glow Input -->
+  <div class="card" data-cat="micro" id="anim-15">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#15 • Мікро</span>
+        <h3 class="card-title">Breathing Neon Ambient Input</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Atmospheric</span>
+        <span class="tag">Glow Ripple</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <input type="text" class="demo-input-glow" placeholder="Клікніть сюди для фокусу..." />
+    </div>
+    <p class="card-desc">
+      При фокусі в поле вводу навколо рамки розтікається м'який неоновий ореол (0.5 Гц дихання), що делікатно пульсує під час набору тексту.
+    </p>
+    <div class="card-code">lib_ui/ui/widgets/input_fields.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(15, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(15, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 16. Holographic Diagonal Shimmer -->
+  <div class="card" data-cat="media" id="anim-16">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#16 • Медіа</span>
+        <h3 class="card-title">Holographic Diagonal Shimmer</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Shimmer</span>
+        <span class="tag">Glass Wave</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <div class="demo-shimmer-box"></div>
+    </div>
+    <p class="card-desc">
+      Замість сірого кружечка завантаження медіа: по діагоналі карток фото й документів біжить м'який голографічний скляний відблиск (shimmer wave).
+    </p>
+    <div class="card-code">history/view/media/history_view_document.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(16, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(16, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 17. Spatial Depth Chat Switch -->
+  <div class="card" data-cat="chat" id="anim-17">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#17 • Чат</span>
+        <h3 class="card-title">Spatial Depth Chat Switch</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Parallax</span>
+        <span class="tag">Depth 3D</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo17()">Змінити чат</button>
+      <div class="demo-chat-switch-wrap" id="chatSwitchWrap">
+        <div class="chat-page chat-page-1">
+          <div style="font-weight:700; font-size:12px; color:var(--accent-primary);">💬 Чат: Дефекслайф</div>
+          <div style="font-size:11px; color:var(--text-muted);">Попередній зміст діалогу...</div>
+        </div>
+        <div class="chat-page chat-page-2">
+          <div style="font-weight:700; font-size:12px; color:var(--accent-primary);">💬 Чат: Льоха</div>
+          <div style="font-size:11px; color:var(--text-muted);">Новий чат виїхав із паралаксом!</div>
+        </div>
+      </div>
+    </div>
+    <p class="card-desc">
+      Перехід між чатами не б'є в очі миттєвим кадром: старий чат занурюється вглиб (depth 0.94x), а новий плавно висувається з паралаксом фону.
+    </p>
+    <div class="card-code">window/section_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(17, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(17, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 18. Staggered Waterfall Sticker Pop -->
+  <div class="card" data-cat="micro" id="anim-18">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#18 • Мікро</span>
+        <h3 class="card-title">Waterfall Sticker Pop</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Staggered</span>
+        <span class="tag">Cascade Wave</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo18()">Відкрити панель</button>
+      <div class="demo-sticker-grid" id="stickerGrid">
+        <div class="sticker-item" style="animation-delay: 0.05s;">😎</div>
+        <div class="sticker-item" style="animation-delay: 0.09s;">🔥</div>
+        <div class="sticker-item" style="animation-delay: 0.13s;">⚡</div>
+        <div class="sticker-item" style="animation-delay: 0.17s;">🚀</div>
+        <div class="sticker-item" style="animation-delay: 0.21s;">👾</div>
+        <div class="sticker-item" style="animation-delay: 0.25s;">🎉</div>
+        <div class="sticker-item" style="animation-delay: 0.29s;">💎</div>
+        <div class="sticker-item" style="animation-delay: 0.33s;">❤️</div>
+      </div>
+    </div>
+    <p class="card-desc">
+      При відкритті панелі стікерів вони вистрибують живим каскадним водоспадом зверху вниз із мікро-затримкою 6мс на елемент.
+    </p>
+    <div class="card-code">chat_helpers/stickers_list_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(18, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(18, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 19. Magnetic Drag & Drop Suction -->
+  <div class="card" data-cat="media" id="anim-19">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#19 • Медіа</span>
+        <h3 class="card-title">Vortex Drag & Drop</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Gravitational</span>
+        <span class="tag">Vortex Pulse</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo19()">Кинути файл</button>
+      <div class="demo-drop-zone" id="dropZone" onclick="runDemo19()">
+        <span style="font-size: 24px;">📥</span>
+        <span style="font-size: 11px; font-weight:600; color:var(--accent-primary);">Перетягніть файл сюди</span>
+      </div>
+    </div>
+    <p class="card-desc">
+      Коли заносиш файл у вікно Telegram, чат плавно відступає вглиб, а по центру розгортається неонова гравітаційна лійка з хвилями тяжіння.
+    </p>
+    <div class="card-code">history/history_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(19, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(19, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+  <!-- 20. Vaporize Ghost Delete -->
+  <div class="card" data-cat="chat" id="anim-20">
+    <div class="card-header">
+      <div>
+        <span class="card-num">#20 • Чат</span>
+        <h3 class="card-title">Vaporize Ghost Delete</h3>
+      </div>
+      <div class="card-tags">
+        <span class="tag">Disintegration</span>
+        <span class="tag">Spring Collapse</span>
+      </div>
+    </div>
+    <div class="demo-stage">
+      <button class="demo-trigger" onclick="runDemo20()">Видалити</button>
+      <div class="demo-vapor-bubble" id="vaporBubble">
+        Повідомлення видаляється в неоновий дим 💨
+      </div>
+    </div>
+    <p class="card-desc">
+      При видаленні повідомлення бульбашка стискається по горизонталі у тонку світяну неонову нитку і розсіюється, а сусідні рядки плавно сходяться.
+    </p>
+    <div class="card-code">history/view/history_view_list_widget.cpp</div>
+    <div class="card-actions">
+      <button class="btn-vote btn-approve" onclick="vote(20, 'approve')">🔥 ХОЧУ ЦЕ</button>
+      <button class="btn-vote btn-reject" onclick="vote(20, 'reject')">💩 ХУЙНЯ</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- STICKY FOOTER -->
+<div class="sticky-footer">
+  <div class="footer-stat">
+    <span class="stat-approved">🔥 Хочу: <b id="statApproved">0</b></span>
+    <span class="stat-rejected">💩 Хуйня: <b id="statRejected">0</b></span>
+  </div>
+  <button class="btn-copy" onclick="copyVerdict()">
+    <span>📋 Скопіювати вердикт для ШІ</span>
+  </button>
+</div>
+
+<script>
+// VOTING SYSTEM
+let savedVotes = {};
+try { savedVotes = JSON.parse(localStorage.getItem('caelestia-motion-votes') || '{}') || {}; } catch (_) {}
+const votes = savedVotes;
+
+function vote(id, type) {
+  const card = document.getElementById('anim-' + id);
+  if (votes[id] === type) {
+    delete votes[id];
+    card.classList.remove('status-approved', 'status-rejected');
+  } else {
+    votes[id] = type;
+    card.classList.remove('status-approved', 'status-rejected');
+    card.classList.add(type === 'approve' ? 'status-approved' : 'status-rejected');
+  }
+  card.querySelectorAll('.btn-vote').forEach(button => button.setAttribute('aria-pressed', String(button.classList.contains(type === 'approve' ? 'btn-approve' : 'btn-reject') && votes[id] === type)));
+  try { localStorage.setItem('caelestia-motion-votes', JSON.stringify(votes)); } catch (_) {}
+  updateStats();
+}
+
+function updateStats() {
+  let app = 0, rej = 0;
+  for (let k in votes) {
+    if (votes[k] === 'approve') app++;
+    if (votes[k] === 'reject') rej++;
+  }
+  document.getElementById('statApproved').innerText = app;
+  document.getElementById('statRejected').innerText = rej;
+}
+
+function copyVerdict() {
+  const titles = {};
+  document.querySelectorAll('.card').forEach(card => { titles[card.id.slice(5)] = card.querySelector('.card-title').textContent; });
+
+  let text = "Ось мій вердикт по анімаціях:\n\n";
+  text += "🔥 ХОЧУ РЕАЛІЗУВАТИ:\n";
+  let hasApp = false;
+  for (let i = 1; i <= 24; i++) {
+    if (votes[i] === 'approve') {
+      text += `• ${titles[i]}\n`;
+      hasApp = true;
+    }
+  }
+  if (!hasApp) text += "(поки нічого не обрано)\n";
+
+  text += "\n💩 ХУЙНЯ / ПРОПУСТИТИ:\n";
+  let hasRej = false;
+  for (let i = 1; i <= 24; i++) {
+    if (votes[i] === 'reject') {
+      text += `• ${titles[i]}\n`;
+      hasRej = true;
+    }
+  }
+  if (!hasRej) text += "(немає відхилених)\n";
+
+  const fallback = () => { const field = document.createElement('textarea'); field.value = text; document.body.appendChild(field); field.select(); const copied = document.execCommand('copy'); field.remove(); alert(copied ? 'Скопійовано в буфер обміну!' : 'Не вдалося скопіювати.'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => alert('Скопійовано в буфер обміну!')).catch(fallback);
+  else fallback();
+}
+
+// SPEED CONTROL
+document.querySelectorAll('.speed-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const s = btn.dataset.speed;
+    document.documentElement.style.setProperty('--speed-multiplier', s);
+  });
+});
+
+// CATEGORY FILTER
+document.querySelectorAll('.btn-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.filter;
+    document.querySelectorAll('.card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Restore votes and calculate filter counts from the actual cards.
+Object.keys(votes).forEach(id => {
+  const card = document.getElementById('anim-' + id);
+  if (!card || !['approve', 'reject'].includes(votes[id])) { delete votes[id]; return; }
+  card.classList.add(votes[id] === 'approve' ? 'status-approved' : 'status-rejected');
+  card.querySelectorAll('.btn-vote').forEach(button => button.setAttribute('aria-pressed', String(button.classList.contains(votes[id] === 'approve' ? 'btn-approve' : 'btn-reject'))));
+});
+updateStats();
+document.querySelectorAll('.btn-filter').forEach(button => {
+  const count = document.querySelectorAll(button.dataset.filter === 'all' ? '.card' : '.card[data-cat="' + button.dataset.filter + '"]').length;
+  button.textContent = button.textContent.replace(/\s*\(\d+\)$/, '') + ' (' + count + ')';
+});
+
+function sendStudy() { document.getElementById('studySend').classList.toggle('sent'); }
+function replyStudy() { document.getElementById('studyReply').classList.toggle('replied'); }
+function reactionStudy() {
+  const chip = document.getElementById('studyReaction');
+  const active = chip.getAttribute('aria-pressed') !== 'true';
+  chip.setAttribute('aria-pressed', String(active));
+  document.getElementById('reactionCount').textContent = active ? '13' : '12';
+  chip.classList.remove('pulse'); void chip.offsetWidth; chip.classList.add('pulse');
+}
+function searchStudy() {
+  const window = document.getElementById('studySearch'); window.classList.toggle('searching');
+  document.getElementById('searchHead').textContent = window.classList.contains('searching') ? '⌕   Олександра' : '⌕   Пошук чатів';
+}
+const replySource = document.getElementById('replySource');
+let replyStart = null, replyDistance = 0;
+replySource.addEventListener('pointerdown', e => { replyStart = e.clientX; replyDistance = 0; replySource.setPointerCapture(e.pointerId); replySource.classList.add('dragging'); });
+replySource.addEventListener('pointermove', e => { if (replyStart === null) return; replyDistance = Math.max(0, Math.min(80, (e.clientX - replyStart) * .65)); replySource.style.transform = `translateX(${replyDistance}px)`; const hint = document.getElementById('replyHint'); hint.style.opacity = Math.min(1, replyDistance / 45); hint.style.transform = `scale(${.5 + Math.min(1, replyDistance / 45) * .5})`; });
+function finishReply(e) { if (replyStart === null) return; if (e.type !== 'pointercancel' && replyDistance >= 40) document.getElementById('studyReply').classList.add('replied'); replyStart = null; replySource.classList.remove('dragging'); replySource.style.transform = ''; document.getElementById('replyHint').style.opacity = '0'; }
+replySource.addEventListener('pointerup', finishReply); replySource.addEventListener('pointercancel', finishReply);
+replySource.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); replyStudy(); } });
+
+// INTERACTIVE DEMO HANDLERS
+
+// 1. Tab Bar
+let activeTabIndex = 0;
+function switchTab(idx) {
+  const pill = document.getElementById('tabPill');
+  const btns = document.querySelectorAll('.demo-tab-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  btns[idx].classList.add('active');
+  pill.classList.add('morphing');
+  pill.style.left = (4 + idx * 105) + 'px';
+  setTimeout(() => pill.classList.remove('morphing'), 180);
+  activeTabIndex = idx;
+}
+function runDemo1() {
+  switchTab((activeTabIndex + 1) % 3);
+}
+
+// 2. Message trail
+function runDemo2() {
+  const scene = document.getElementById('sendScene');
+  scene.classList.remove('sending'); void scene.offsetWidth; scene.classList.add('sending');
+}
+
+// 3. Media Zoom
+function runDemo3() {
+  document.getElementById('mediaThumb').classList.toggle('fullscreen');
+}
+
+// 4. Overscroll
+function runDemo4() {
+  const c = document.getElementById('scrollContent');
+  c.classList.add('overscroll');
+  setTimeout(() => c.classList.remove('overscroll'), 450);
+}
+
+// 5. Magnetic chat focus
+const focusList = document.getElementById('focusList');
+focusList.addEventListener('pointermove', e => {
+  const row = e.target.closest('.focus-row'); if (!row) return;
+  const box = row.getBoundingClientRect();
+  row.style.setProperty('--x', (e.clientX - box.left) + 'px'); row.style.setProperty('--y', (e.clientY - box.top) + 'px');
+});
+function selectFocus(index) {
+  document.getElementById('focusIndicator').style.transform = `translateY(${index * 48}px)`;
+  focusList.querySelectorAll('.focus-row').forEach((row, i) => { row.classList.toggle('selected', i === index); row.setAttribute('aria-pressed', String(i === index)); });
+}
+selectFocus(0);
+
+// 6. Media capsule
+function toggleMedia() {
+  const capsule = document.getElementById('mediaCapsule');
+  capsule.classList.toggle('open');
+  document.getElementById('mediaExpand').setAttribute('aria-expanded', String(capsule.classList.contains('open')));
+}
+function togglePlayback() {
+  const capsule = document.getElementById('mediaCapsule'); capsule.classList.toggle('paused');
+  const paused = capsule.classList.contains('paused');
+  const button = document.getElementById('mediaPlay'); button.textContent = paused ? '▶' : 'Ⅱ';
+  button.setAttribute('aria-label', paused ? 'Відновити' : 'Поставити на паузу');
+}
+
+// 7. Simulated recording
+const voiceBars = document.getElementById('voiceBars');
+[9,16,11,21,14,23,10,17,22,12,18,8,20,13,16,10,22,15,9,19,12,16].forEach((height, i) => {
+  const bar = document.createElement('i'); bar.style.setProperty('--h', height + 'px'); bar.style.setProperty('--delay', (-i * .08) + 's'); voiceBars.appendChild(bar);
+});
+let voiceTimer = null, voiceStarted = 0;
+function toggleVoice() {
+  const scene = document.getElementById('voiceScene'), button = document.getElementById('voiceRecord');
+  const recording = scene.classList.toggle('recording');
+  button.setAttribute('aria-pressed', String(recording)); button.setAttribute('aria-label', recording ? 'Зупинити запис' : 'Почати запис');
+  clearInterval(voiceTimer); document.getElementById('voiceTime').textContent = '0:00';
+  if (recording) { voiceStarted = Date.now(); voiceTimer = setInterval(() => { const seconds = Math.floor((Date.now() - voiceStarted) / 1000); document.getElementById('voiceTime').textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0'); }, 250); }
+}
+
+// 8. Reaction bloom
+function runDemo8() {
+  const chip = document.getElementById('reactChip'); const active = chip.getAttribute('aria-pressed') !== 'true';
+  chip.setAttribute('aria-pressed', String(active)); document.getElementById('reactCount').textContent = active ? '43' : '42';
+  chip.classList.remove('bloom'); void chip.offsetWidth; if (active) chip.classList.add('bloom');
+}
+
+// 9. Odometer
+let odoVal = 0;
+function runDemo9() {
+  odoVal = (odoVal + 1) % 5;
+  document.getElementById('digitReel').style.transform = `translateY(-${odoVal * 34}px)`;
+}
+
+// 10. Sent / read
+function runDemo10() {
+  const scene = document.getElementById('receiptScene'); scene.classList.toggle('read');
+  const read = scene.classList.contains('read');
+  document.getElementById('receiptAction').textContent = read ? 'Показати знову' : 'Позначити прочитаним';
+  document.getElementById('receiptLabel').textContent = read ? '✓✓  Прочитано' : '✓  Надіслано';
+}
+
+// 11. Menu
+function moveMenuCursor(idx) {
+  document.getElementById('menuCursor').style.top = (6 + idx * 32) + 'px';
+}
+
+// 12. Swipe
+function runDemo12() {
+  const b = document.getElementById('swipeBox');
+  b.classList.add('swiped');
+  setTimeout(() => b.classList.remove('swiped'), 600);
+}
+
+// 13. Accordion
+function runDemo13() {
+  document.getElementById('accordionContent').classList.toggle('open');
+}
+
+// 14. FAB
+function runDemo14() {
+  const fab = document.getElementById('fabBtn');
+  const txt = document.getElementById('fabText');
+  fab.classList.toggle('expanded');
+  txt.style.display = fab.classList.contains('expanded') ? 'inline' : 'none';
+}
+
+// 17. Chat Switch
+function runDemo17() {
+  document.getElementById('chatSwitchWrap').classList.toggle('switched');
+}
+
+// 18. Stickers
+function runDemo18() {
+  const grid = document.getElementById('stickerGrid');
+  grid.classList.remove('open');
+  void grid.offsetWidth;
+  grid.classList.add('open');
+}
+
+// 19. Drop zone
+function runDemo19() {
+  const dz = document.getElementById('dropZone');
+  dz.classList.add('active');
+  setTimeout(() => dz.classList.remove('active'), 600);
+}
+
+// 20. Vaporize
+function runDemo20() {
+  const v = document.getElementById('vaporBubble');
+  v.classList.add('vaporized');
+  setTimeout(() => v.classList.remove('vaporized'), 1200);
+}
+</script>
+
+</body>
+</html>

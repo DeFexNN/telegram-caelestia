@@ -1,0 +1,1638 @@
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/chat_helpers/chat_helpers.style b/Telegram/SourceFiles/chat_helpers/chat_helpers.style
+--- a/Telegram/SourceFiles/chat_helpers/chat_helpers.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/chat_helpers/chat_helpers.style	2026-10-30 02:37:56.848643826 +0300
+@@ -1280,15 +1280,15 @@
+ historyUnreadThingsSkip: 4px;
+ 
+ historyQuoteStyle: QuoteStyle(defaultQuoteStyle) {
+-	padding: margins(10px, 2px, 4px, 2px);
++	padding: margins(12px, 4px, 8px, 4px);
+ 	verticalSkip: 4px;
+ 	outline: 3px;
+ 	outlineShift: 2px;
+-	radius: 5px;
++	radius: 10px;
+ }
+ historyTextStyle: TextStyle(defaultTextStyle) {
+ 	blockquote: QuoteStyle(historyQuoteStyle) {
+-		padding: margins(10px, 2px, 20px, 2px);
++		padding: margins(12px, 4px, 20px, 4px);
+ 		icon: icon{{ "chat/mini_quote", windowFg }};
+ 		iconPosition: point(4px, 4px);
+ 		expand: icon{{ "intro_country_dropdown", windowFg }};
+@@ -1306,22 +1306,24 @@
+ }
+ historyComposeField: InputField(defaultInputField) {
+ 	style: historyTextStyle;
+-	textMargins: margins(0px, 0px, 0px, 0px);
++	textMargins: margins(8px, 4px, 8px, 4px);
+ 	textAlign: align(left);
+ 	textFg: historyComposeAreaFg;
+ 	textBg: historyComposeAreaBg;
++	textBgActive: historyComposeAreaBg;
+ 	heightMin: 36px;
+ 	heightMax: 72px;
+ 	placeholderFg: placeholderFg;
+ 	placeholderFgActive: placeholderFgActive;
+ 	placeholderFgError: placeholderFgActive;
+-	placeholderMargins: margins(2px, 0px, 2px, 0px);
++	placeholderMargins: margins(8px, 4px, 8px, 4px);
+ 	placeholderAlign: align(topleft);
+ 	placeholderScale: 0.;
+ 	placeholderFont: normalFont;
+ 	placeholderShift: -50px;
+ 	border: 0px;
+ 	borderActive: 0px;
++	borderRadius: 14px;
+ 	duration: 100;
+ }
+ historyComposeFieldMaxHeight: 224px;
+@@ -1536,7 +1538,7 @@
+ 	sendDisabledFg: historyComposeIconFg;
+ 	sendIconFg: historySendIconFg;
+ 	stopSize: size(14px, 14px);
+-	stopRadius: 3px;
++	stopRadius: 5px;
+ }
+ historyAiComposeButton: IconButton(historyAttach) {
+ 	width: 28px;
+@@ -1652,7 +1654,7 @@
+ }
+ defaultComposeControls: ComposeControls {
+ 	bg: historyComposeAreaBg;
+-	radius: 0px;
++	radius: 15px;
+ 	padding: margins(historySendRight, historySendPadding, historySendRight, historySendPadding);
+ 
+ 	field: historyComposeField;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/dialogs/dialogs.style b/Telegram/SourceFiles/dialogs/dialogs.style
+--- a/Telegram/SourceFiles/dialogs/dialogs.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/dialogs/dialogs.style	2026-10-30 02:35:37.513796361 +0300
+@@ -76,8 +76,8 @@
+ }
+ 
+ dialogsUnreadFont: font(12px bold);
+-dialogsUnreadHeight: 19px;
+-dialogsUnreadPadding: 5px;
++dialogsUnreadHeight: 20px;
++dialogsUnreadPadding: 6px;
+ 
+ dialogsRipple: RippleAnimation(defaultRippleAnimation) {
+ 	color: dialogsRippleBg;
+@@ -86,71 +86,71 @@
+ dialogsTextFont: normalFont;
+ dialogsTextStyle: defaultTextStyle;
+ dialogsDateFont: font(13px);
+-dialogsDateSkip: 5px;
++dialogsDateSkip: 6px;
+ 
+-dialogsRowHeight: 62px;
+-dialogsFilterPadding: point(7px, 7px);
+-dialogsFilterSkip: 4px;
++dialogsRowHeight: 70px;
++dialogsFilterPadding: point(8px, 8px);
++dialogsFilterSkip: 6px;
+ 
+ defaultDialogRow: DialogRow {
+ 	height: dialogsRowHeight;
+-	padding: margins(10px, 8px, 10px, 8px);
++	padding: margins(18px, 12px, 16px, 12px);
+ 	photoSize: 46px;
+-	nameLeft: 68px;
+-	nameTop: 10px;
+-	textLeft: 68px;
+-	textTop: 34px;
++	nameLeft: 76px;
++	nameTop: 14px;
++	textLeft: 76px;
++	textTop: 38px;
+ }
+ communityRequestableListItem: PeerListItem(defaultPeerListItem) {
+-	height: dialogsRowHeight;            // == st::defaultDialogRow.height (62px)
++	height: dialogsRowHeight;            // == st::defaultDialogRow.height (70px)
+ 	photoSize: 46px;                     // == st::defaultDialogRow.photoSize
+-	photoPosition: point(10px, 8px);     // == st::defaultDialogRow.padding left/top (10,8)
+-	namePosition: point(68px, 10px);     // == st::defaultDialogRow.nameLeft / nameTop
+-	statusPosition: point(68px, 34px);   // == st::defaultDialogRow.textLeft / textTop
++	photoPosition: point(18px, 12px);    // == st::defaultDialogRow.padding left/top (18,12)
++	namePosition: point(76px, 14px);     // == st::defaultDialogRow.nameLeft / nameTop
++	statusPosition: point(76px, 38px);   // == st::defaultDialogRow.textLeft / textTop
+ }
+ communityRequestableList: PeerList(defaultPeerList) {
+ 	item: communityRequestableListItem;
+ }
+ taggedDialogRow: DialogRow(defaultDialogRow) {
+-	height: 72px;
+-	textTop: 30px;
+-	tagTop: 52px;
++	height: 80px;
++	textTop: 34px;
++	tagTop: 56px;
+ }
+ forumDialogRow: DialogRow(defaultDialogRow) {
+-	height: 80px;
+-	textTop: 32px;
++	height: 88px;
++	textTop: 36px;
+ 	topicsSkip: 8px;
+ 	topicsSkipBig: 14px;
+ 	topicsHeight: 21px;
+ }
+ taggedForumDialogRow: DialogRow(forumDialogRow) {
+-	height: 96px;
+-	tagTop: 77px;
++	height: 104px;
++	tagTop: 81px;
+ }
+ communityInfoDialogRow: DialogRow(defaultDialogRow) {
+-	padding: margins(22px, 8px, 18px, 8px);
+-	nameLeft: 80px;
+-	textLeft: 80px;
++	padding: margins(24px, 12px, 18px, 12px);
++	nameLeft: 82px;
++	textLeft: 82px;
+ }
+ communityInfoTaggedDialogRow: DialogRow(taggedDialogRow) {
+-	padding: margins(22px, 8px, 18px, 8px);
+-	nameLeft: 80px;
+-	textLeft: 80px;
++	padding: margins(24px, 12px, 18px, 12px);
++	nameLeft: 82px;
++	textLeft: 82px;
+ }
+ communityInfoForumDialogRow: DialogRow(forumDialogRow) {
+-	padding: margins(22px, 8px, 18px, 8px);
+-	nameLeft: 80px;
+-	textLeft: 80px;
++	padding: margins(24px, 12px, 18px, 12px);
++	nameLeft: 82px;
++	textLeft: 82px;
+ }
+ communityInfoTaggedForumDialogRow: DialogRow(taggedForumDialogRow) {
+-	padding: margins(22px, 8px, 18px, 8px);
+-	nameLeft: 80px;
+-	textLeft: 80px;
++	padding: margins(24px, 12px, 18px, 12px);
++	nameLeft: 82px;
++	textLeft: 82px;
+ }
+ communityInfoRequestableListItem: PeerListItem(communityRequestableListItem) {
+-	photoPosition: point(22px, 8px);     // == st::communityInfoDialogRow.padding left/top (22,8)
+-	namePosition: point(80px, 10px);     // == st::communityInfoDialogRow.nameLeft / nameTop
+-	statusPosition: point(80px, 34px);   // == st::communityInfoDialogRow.textLeft / textTop
++	photoPosition: point(24px, 12px);
++	namePosition: point(82px, 14px);
++	statusPosition: point(82px, 38px);
+ }
+ communityInfoRequestableList: PeerList(defaultPeerList) {
+ 	item: communityInfoRequestableListItem;
+@@ -314,28 +314,28 @@
+ dialogsFilter: InputField(defaultInputField) {
+ 	textBg: filterInputInactiveBg;
+ 	textBgActive: filterInputActiveBg;
+-	textMargins: margins(12px, 8px, 30px, 5px);
++	textMargins: margins(14px, 7px, 32px, 7px);
+ 
+ 	placeholderFg: placeholderFg;
+ 	placeholderFgActive: placeholderFgActive;
+ 	placeholderFgError: placeholderFgActive;
+-	placeholderMargins: margins(5px, 0px, 2px, 0px);
++	placeholderMargins: margins(4px, 0px, 2px, 0px);
+ 	placeholderScale: 0.;
+ 	placeholderShift: -50px;
+ 	placeholderFont: normalFont;
+ 
+-	borderFg: filterInputInactiveBg;
++	borderFg: filterInputBorderFg;
+ 	borderFgActive: windowBgRipple;
+ 	borderFgError: activeLineFgError;
+ 
+-	border: 3px;
+-	borderActive: 2px;
+-	borderRadius: 18px;
+-	borderDenominator: 2;
++	border: 0px;
++	borderActive: 0px;
++	borderRadius: 14px;
++	borderDenominator: 1;
+ 
+ 	style: defaultTextStyle;
+ 
+-	heightMin: 35px;
++	heightMin: 38px;
+ }
+ dialogsCancelSearchInPeer: IconButton(dialogsMenuToggle) {
+ 	icon: icon {{ "dialogs/dialogs_cancel_search", dialogsMenuIconFg }};
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp b/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp
+--- a/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/dialogs/dialogs_inner_widget.cpp	2026-11-02 00:38:27.105464652 +0300
+@@ -100,11 +100,151 @@
+ 
+ #include <QtWidgets/QApplication>
+ #include <QtCore/QMimeData>
++#include <QtGui/QPen>
+ #include <unordered_map>
++#include <cmath>
++#include <chrono>
++#include <fstream>
++#include <vector>
++#include <algorithm>
++
++namespace anim {
++extern transition standard;
++extern transition emphasizedDecel;
++} // namespace anim
+ 
+ namespace Dialogs {
+ namespace {
+ 
++struct MagneticFocus {
++	Ui::Animations::Simple anim;
++	float64 currentY = -1000.0;
++	float64 fromY = -1000.0;
++	float64 toY = -1000.0;
++	float64 currentHeight = 72.0;
++	float64 fromHeight = 72.0;
++	float64 toHeight = 72.0;
++	RowDescriptor activeEntry;
++	RowDescriptor previousEntry;
++	FilterId filterId = 0;
++	bool initialized = false;
++};
++
++static base::flat_map<const QWidget*, MagneticFocus> g_focusMap;
++
++struct PerfProfiler {
++	std::chrono::steady_clock::time_point lastFrameTime;
++	std::chrono::steady_clock::time_point animStartTime;
++	int frameCount = 0;
++	int droppedFrames = 0;
++	float64 maxFrameTimeMs = 0.0;
++	float64 minFrameTimeMs = 999.0;
++	float64 totalFrameTimeMs = 0.0;
++	float64 lastPaintTimeMs = 0.0;
++	float64 currentFps = 120.0;
++	float64 avgFps = 120.0;
++	bool isCurrentlyAnimating = false;
++	bool wasAnimating = false;
++	bool isIdle = true;
++	std::vector<float64> frameDeltas;
++
++	void recordFrame(bool isAnimating, float64 currentY) {
++		const auto now = std::chrono::steady_clock::now();
++		isCurrentlyAnimating = isAnimating;
++
++		if (lastFrameTime.time_since_epoch().count() != 0) {
++			const auto dtUs = std::chrono::duration_cast<std::chrono::microseconds>(now - lastFrameTime).count();
++			const auto dtMs = dtUs / 1000.0;
++
++			if (isAnimating) {
++				if (dtMs > 0.1 && dtMs < 250.0) {
++					currentFps = 1000.0 / dtMs;
++					avgFps = (avgFps * 0.85) + (currentFps * 0.15);
++					frameDeltas.push_back(dtMs);
++					totalFrameTimeMs += dtMs;
++					maxFrameTimeMs = std::max(maxFrameTimeMs, dtMs);
++					minFrameTimeMs = std::min(minFrameTimeMs, dtMs);
++					frameCount++;
++					const auto isDrop = (dtMs > 12.0);
++					if (isDrop) droppedFrames++;
++
++					static std::ofstream logFile("/tmp/telegram_anim_perf.log", std::ios::app);
++					if (logFile.is_open()) {
++						logFile << (isDrop ? "[PERF DROP!] " : "[PERF] ")
++								<< "Frame #" << frameCount
++								<< " dt=" << dtMs << "ms"
++								<< " fps=" << currentFps
++								<< " paint=" << lastPaintTimeMs << "ms"
++								<< " y=" << currentY
++								<< std::endl;
++					}
++				}
++				isIdle = false;
++			} else {
++				if (dtMs > 25.0) {
++					isIdle = true;
++				} else if (dtMs > 0.1) {
++					currentFps = 1000.0 / dtMs;
++					isIdle = false;
++					static std::ofstream logFile("/tmp/telegram_anim_perf.log", std::ios::app);
++					if (logFile.is_open()) {
++						logFile << "[SCROLL] dt=" << dtMs << "ms"
++								<< " fps=" << currentFps
++								<< " paint=" << lastPaintTimeMs << "ms"
++								<< std::endl;
++					}
++				}
++			}
++		}
++		if (isAnimating && !wasAnimating) {
++			animStartTime = now;
++			frameCount = 0;
++			droppedFrames = 0;
++			totalFrameTimeMs = 0.0;
++			maxFrameTimeMs = 0.0;
++			minFrameTimeMs = 999.0;
++			frameDeltas.clear();
++			isIdle = false;
++			static std::ofstream logFile("/tmp/telegram_anim_perf.log", std::ios::app);
++			if (logFile.is_open()) {
++				logFile << "\n=== ANIMATION BENCHMARK STARTED ===" << std::endl;
++			}
++		} else if (!isAnimating && wasAnimating) {
++			if (!frameDeltas.empty()) {
++				avgFps = (frameCount * 1000.0) / std::max(0.001, totalFrameTimeMs);
++				std::sort(frameDeltas.begin(), frameDeltas.end());
++				const auto p99Index = int(frameDeltas.size() * 0.99);
++				const auto p99Dt = frameDeltas[std::min(p99Index, int(frameDeltas.size() - 1))];
++				const auto low1Fps = 1000.0 / std::max(0.001, p99Dt);
++
++				static std::ofstream logFile("/tmp/telegram_anim_perf.log", std::ios::app);
++				if (logFile.is_open()) {
++					logFile << "=== BENCHMARK SUMMARY ===\n"
++							<< "  Total Frames : " << frameCount << "\n"
++							<< "  Total Time   : " << totalFrameTimeMs << " ms\n"
++							<< "  Avg FPS      : " << avgFps << "\n"
++							<< "  1% Low FPS   : " << low1Fps << "\n"
++							<< "  Max FrameTime: " << maxFrameTimeMs << " ms\n"
++							<< "  Min FrameTime: " << minFrameTimeMs << " ms\n"
++							<< "  Dropped (>12ms): " << droppedFrames << " ("
++							<< (frameCount ? (droppedFrames * 100.0 / frameCount) : 0) << "%)\n"
++							<< "=========================\n" << std::endl;
++				}
++			}
++		}
++		wasAnimating = isAnimating;
++		lastFrameTime = now;
++	}
++
++	void recordPaintEnd(const std::chrono::steady_clock::time_point &start) {
++		const auto paintUs = std::chrono::duration_cast<std::chrono::microseconds>(
++			std::chrono::steady_clock::now() - start).count();
++		lastPaintTimeMs = paintUs / 1000.0;
++	}
++};
++
++static PerfProfiler g_profiler;
++
+ constexpr auto kFreezeTimeout = 2 * crl::time(1000);
+ constexpr auto kHashtagResultsLimit = 5;
+ constexpr auto kStartReorderThreshold = 30;
+@@ -1019,6 +1159,8 @@
+ }
+ 
+ void InnerWidget::paintEvent(QPaintEvent *e) {
++	const auto paintStart = std::chrono::steady_clock::now();
++	g_profiler.recordFrame(g_focusMap[this].anim.animating(), g_focusMap[this].currentY);
+ 	Painter p(this);
+ 
+ 	p.setInactive(
+@@ -1048,6 +1190,7 @@
+ 		.narrow = (fullWidth < st::columnMinimalWidthLeft / 2),
+ 		.insideCommunity = communityModeShown(),
+ 	};
++	p.fillRect(r, context.currentBg);
+ 	const auto fillGuard = gsl::finally([&] {
+ 		// We translate painter down, but it'll be cropped below rect.
+ 		p.fillRect(rect(), context.currentBg);
+@@ -1057,7 +1200,16 @@
+ 			bool selected,
+ 			bool mayBeActive) {
+ 		const auto &key = row->key();
+-		const auto active = mayBeActive && isRowActive(row, activeEntry);
++		const auto &focus = g_focusMap[this];
++		auto active = mayBeActive && isRowActive(row, activeEntry);
++		if (focus.anim.animating()) {
++			const auto pVal = focus.anim.value(1.);
++			if (active && (pVal < 0.5)) {
++				active = false;
++			} else if (!active && mayBeActive && (pVal < 0.5) && focus.previousEntry.key && isRowActive(row, focus.previousEntry)) {
++				active = true;
++			}
++		}
+ 		const auto history = key.history();
+ 		const auto forum = history && history->peer->displayAsForum();
+ 		const auto monoforum = history && history->amMonoforumAdmin();
+@@ -1213,6 +1365,7 @@
+ 				cacheSize,
+ 				cacheRatio,
+ 				[&](QImage &image) {
++					image.fill(context.currentBg->color());
+ 					if (view) {
+ 						view->resetLastPaintGeometry();
+ 					}
+@@ -1296,6 +1449,130 @@
+ 				}
+ 			};
+ 
++			Row *activeRow = nullptr;
++			if (activeEntry.key) {
++				activeRow = _shownList->getRow(activeEntry.key);
++				if (!activeRow) {
++					if (const auto topic = activeEntry.key.topic()) {
++						activeRow = _shownList->getRow(topic->history());
++					} else if (const auto sublist = activeEntry.key.sublist()) {
++						activeRow = _shownList->getRow(sublist->owningHistory());
++					}
++				}
++			}
++
++			auto &focus = g_focusMap[this];
++			if (activeRow) {
++				const auto targetY = float64(activeRow->top() - skippedTop);
++				const auto targetHeight = float64(activeRow->height());
++				if (focus.filterId != _filterId) {
++					focus.filterId = _filterId;
++					focus.initialized = false;
++				}
++				if (focus.activeEntry != activeEntry) {
++					focus.previousEntry = focus.activeEntry;
++					focus.activeEntry = activeEntry;
++					if (focus.initialized && focus.currentY > -1000.0 && std::abs(targetY - focus.currentY) < height() * 2.0) {
++						focus.fromY = focus.currentY;
++						focus.toY = targetY;
++						focus.fromHeight = focus.currentHeight;
++						focus.toHeight = targetHeight;
++						focus.anim.start(
++							[this] { update(); },
++							0.,
++							1.,
++							crl::time(220),
++							anim::standard);
++					} else {
++						focus.initialized = true;
++						focus.currentY = targetY;
++						focus.toY = targetY;
++						focus.fromHeight = targetHeight;
++						focus.toHeight = targetHeight;
++						focus.currentHeight = targetHeight;
++					}
++				}
++
++				auto drawY = targetY;
++				auto drawHeight = targetHeight;
++				auto bloomAlpha = 0.0;
++				auto stretch = 0.0;
++				auto widthContract = 0.0;
++				auto currentPillHeight = 24.0;
++
++				if (focus.anim.animating()) {
++					const auto progress = focus.anim.value(1.);
++					const auto moveDelta = focus.toY - focus.fromY;
++					const auto baseY = anim::interpolate(focus.fromY, focus.toY, progress);
++					focus.currentY = baseY;
++					focus.currentHeight = anim::interpolate(focus.fromHeight, focus.toHeight, progress);
++
++					// Dynamic asymmetric liquid droplet stretch
++					stretch = std::sin(progress * M_PI) * std::min(24.0, std::abs(moveDelta) * 0.20);
++					widthContract = std::sin(progress * M_PI) * std::min(3.0, std::abs(moveDelta) * 0.03);
++
++					// Leading edge extends forward in motion direction
++					if (moveDelta > 0) {
++						drawY = baseY;
++						drawHeight = focus.currentHeight + stretch;
++					} else {
++						drawY = baseY - stretch;
++						drawHeight = focus.currentHeight + stretch;
++					}
++
++					// Left neon accent filament stretches
++					currentPillHeight = 24.0 + std::sin(progress * M_PI) * std::min(12.0, std::abs(moveDelta) * 0.10);
++
++					// Landing bloom when arriving at target (progress > 0.65)
++					if (progress > 0.65) {
++						const auto arrivalProgress = (progress - 0.65) / 0.35;
++						bloomAlpha = std::sin(arrivalProgress * M_PI);
++					}
++				} else {
++					focus.currentY = targetY;
++					focus.currentHeight = targetHeight;
++					drawY = targetY;
++					drawHeight = targetHeight;
++				}
++
++				if (focus.initialized) {
++					const auto cardRect = QRectF(
++						8.0 + widthContract,
++						drawY + 3.0,
++						fullWidth - 16.0 - 2.0 * widthContract,
++						drawHeight - 6.0);
++					constexpr auto cardRadius = 14.0;
++					p.save();
++					p.setRenderHint(QPainter::Antialiasing);
++
++					// Landing bloom contour outline on impact
++					if (bloomAlpha > 0.01) {
++						p.setPen(QPen(QColor(155, 208, 204, int(150 * bloomAlpha)), 1.5));
++					} else {
++						p.setPen(Qt::NoPen);
++					}
++					p.setBrush(st::dialogsBgActive);
++					p.drawRoundedRect(cardRect, cardRadius, cardRadius);
++
++					if (!context.narrow) {
++						p.setPen(Qt::NoPen);
++						p.setBrush(st::dialogsUnreadBg);
++						constexpr auto indicatorWidth = 3.5;
++						const auto indicatorLeft = cardRect.left() + 3.0;
++						const auto indicatorTop = cardRect.top() + (cardRect.height() - currentPillHeight) / 2.0;
++						constexpr auto pillRadius = 1.75;
++						p.drawRoundedRect(
++							QRectF(indicatorLeft, indicatorTop, indicatorWidth, currentPillHeight),
++							pillRadius,
++							pillRadius);
++					}
++					p.restore();
++				}
++			} else {
++				focus.initialized = false;
++				focus.activeEntry = RowDescriptor();
++			}
++
+ 			auto i = list.findByY(dialogsClip.top() - skip);
+ 			if (_skipTopDialog && i != list.cend() && !(*i)->index()) {
+ 				++i;
+@@ -1732,6 +2009,63 @@
+ 			}
+ 		}
+ 	}
++
++	g_profiler.recordPaintEnd(paintStart);
++
++	const auto &focus = g_focusMap[this];
++	p.save();
++	p.resetTransform();
++	p.setRenderHint(QPainter::Antialiasing);
++
++	QString hudText;
++	QColor statusColor;
++
++	if (focus.anim.animating()) {
++		const auto displayFps = g_profiler.currentFps;
++		hudText = QString("%1 FPS | %2ms | Paint %3ms")
++			.arg(displayFps, 0, 'f', 1)
++			.arg(1000.0 / std::max(1.0, displayFps), 0, 'f', 1)
++			.arg(g_profiler.lastPaintTimeMs, 0, 'f', 2);
++
++		statusColor = (displayFps >= 115.0)
++			? QColor(155, 208, 204)
++			: (displayFps >= 90.0)
++			? QColor(240, 200, 100)
++			: QColor(255, 110, 110);
++	} else if (!g_profiler.isIdle) {
++		const auto paintMs = g_profiler.lastPaintTimeMs;
++		hudText = QString("SCROLL | Paint %1ms | 120Hz")
++			.arg(paintMs, 0, 'f', 2);
++		statusColor = (paintMs <= 4.0)
++			? QColor(155, 208, 204)
++			: (paintMs <= 8.3)
++			? QColor(240, 200, 100)
++			: QColor(255, 110, 110);
++	} else {
++		hudText = QString("120Hz (IDLE) | Paint %1ms | Avg %2 FPS")
++			.arg(g_profiler.lastPaintTimeMs, 0, 'f', 2)
++			.arg(g_profiler.avgFps, 0, 'f', 0);
++		statusColor = QColor(155, 208, 204);
++	}
++
++	QFont hudFont(st::semiboldFont->f);
++	hudFont.setPointSize(8);
++	p.setFont(hudFont);
++	const auto fm = QFontMetrics(hudFont);
++	const auto textW = fm.horizontalAdvance(hudText);
++	const auto hudRect = QRectF(fullWidth - textW - 24, 6, textW + 16, 20);
++
++	p.setPen(Qt::NoPen);
++	p.setBrush(QColor(15, 23, 22, 220));
++	p.drawRoundedRect(hudRect, 5, 5);
++
++	p.setPen(QPen(statusColor, 1.0));
++	p.setBrush(Qt::NoBrush);
++	p.drawRoundedRect(hudRect, 5, 5);
++
++	p.setPen(statusColor);
++	p.drawText(hudRect, Qt::AlignCenter, hudText);
++	p.restore();
+ }
+ 
+ void InnerWidget::fillRightButton(
+@@ -4419,6 +4753,7 @@
+ }
+ 
+ InnerWidget::~InnerWidget() {
++	g_focusMap.erase(this);
+ 	unfreezeShownList(false);
+ 	session().data().stories().decrementPreloadingMainSources();
+ 	clearSearchResults();
+@@ -5652,6 +5987,7 @@
+ }
+ 
+ void InnerWidget::switchToFilter(FilterId filterId) {
++	const auto switchStart = std::chrono::steady_clock::now();
+ 	if (_controller->windowId().type != Window::SeparateType::Primary) {
+ 		return;
+ 	}
+@@ -5687,6 +6023,12 @@
+ 			jumpToTop();
+ 		}
+ 	}
++	const auto switchUs = std::chrono::duration_cast<std::chrono::microseconds>(
++		std::chrono::steady_clock::now() - switchStart).count();
++	static std::ofstream logFile("/tmp/telegram_anim_perf.log", std::ios::app);
++	if (logFile.is_open()) {
++		logFile << "[TAB SWITCH] Switched to Filter " << filterId << " in " << (switchUs / 1000.0) << " ms" << std::endl;
++	}
+ }
+ 
+ void InnerWidget::jumpToTop() {
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/dialogs/dialogs_row.h b/Telegram/SourceFiles/dialogs/dialogs_row.h
+--- a/Telegram/SourceFiles/dialogs/dialogs_row.h	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/dialogs/dialogs_row.h	2026-11-02 00:38:05.071375395 +0300
+@@ -70,6 +70,10 @@
+ 		int outerWidth,
+ 		const QColor *colorOverride = nullptr) const;
+ 
++	[[nodiscard]] bool hasRipple() const {
++		return (_ripple != nullptr);
++	}
++
+ 	[[nodiscard]] Ui::PeerUserpicView &userpicView() const {
+ 		return _userpic;
+ 	}
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/dialogs/dialogs_widget.style b/Telegram/SourceFiles/dialogs/dialogs_widget.style
+--- a/Telegram/SourceFiles/dialogs/dialogs_widget.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/dialogs/dialogs_widget.style	2026-10-30 02:35:43.789922872 +0300
+@@ -63,4 +63,4 @@
+ dialogsCommunityRequestsBubbleIconMargin: 9px;
+ dialogsCommunityRequestsBubbleTextSkip: 48px;
+ dialogsCommunityRequestsBubbleRightInset: 9px;
+-dialogsCommunityRequestsBubbleRadius: 11px;
++dialogsCommunityRequestsBubbleRadius: 14px;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/dialogs/ui/dialogs_layout.cpp b/Telegram/SourceFiles/dialogs/ui/dialogs_layout.cpp
+--- a/Telegram/SourceFiles/dialogs/ui/dialogs_layout.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/dialogs/ui/dialogs_layout.cpp	2026-11-02 00:38:13.157019025 +0300
+@@ -21,8 +21,19 @@
+ #include "data/data_user.h"
+ #include "data/stickers/data_custom_emoji.h"
+ #include "dialogs/dialogs_list.h"
++#include "dialogs/dialogs_row.h"
+ #include "dialogs/dialogs_three_state_icon.h"
+ #include "dialogs/dialogs_quick_action.h"
++#include "ui/effects/animations.h"
++
++namespace st {
++static int _menuRadius = 12;
++const int &menuRadius(_menuRadius);
++}
++
++namespace {
++
++} // namespace
+ #include "dialogs/ui/dialogs_video_userpic.h"
+ #include "history/history.h"
+ #include "history/history_item.h"
+@@ -51,6 +62,8 @@
+ #include "styles/style_widgets.h"
+ #include "styles/style_window.h"
+ 
++#include <QtGui/QPainterPath>
++
+ namespace Dialogs::Ui {
+ 
+ const char kOptionDialogsMuteIcon[] = "dialogs-mute-icon";
+@@ -287,7 +300,7 @@
+ 
+ void PaintExpandedTopicsBar(QPainter &p, float64 progress) {
+ 	auto hq = PainterHighQualityEnabler(p);
+-	const auto radius = st::roundRadiusLarge;
++	const auto radius = 14;
+ 	const auto width = st::forumDialogRow.padding.left() / 2;
+ 	p.setPen(Qt::NoPen);
+ 	p.setBrush(st::dialogsBgActive);
+@@ -465,11 +478,6 @@
+ 	const auto thread = entry->asThread();
+ 	const auto sublist = entry->asSublist();
+ 
+-	auto bg = context.active
+-		? st::dialogsBgActive
+-		: context.selected
+-		? st::dialogsBgOver
+-		: context.currentBg;
+ 	auto swipeTranslation = 0.;
+ 	auto swipeMirrored = false;
+ 	if (history
+@@ -484,12 +492,27 @@
+ 	if (swipeTranslation) {
+ 		p.translate(swipeMirrored ? swipeTranslation : -swipeTranslation, 0);
+ 	}
+-	p.fillRect(geometry, bg);
+-	if (!(flags & Flag::TopicJumpRipple)) {
+-		auto ripple = context.active
+-			? st::dialogsRippleBgActive
+-			: st::dialogsRippleBg;
+-		row->paintRipple(p, 0, 0, context.width, &ripple->c);
++	const auto cardRect = geometry.adjusted(8, 3, -8, -3);
++	constexpr auto cardRadius = 14;
++
++	if (context.selected && !context.active) {
++		p.save();
++		p.setRenderHint(QPainter::Antialiasing);
++		p.setPen(Qt::NoPen);
++		p.setBrush(st::dialogsBgOver);
++		p.drawRoundedRect(cardRect, cardRadius, cardRadius);
++		p.restore();
++	}
++	if (!(flags & Flag::TopicJumpRipple) && row->hasRipple()) {
++		p.save();
++		p.setRenderHint(QPainter::Antialiasing);
++		QPainterPath clip;
++		clip.addRoundedRect(cardRect, cardRadius, cardRadius);
++		p.setClipPath(clip);
++		// Delicate translucent mint ripple instead of opaque solid fill
++		const auto rippleColor = QColor(155, 208, 204, 38);
++		row->paintRipple(p, 0, 0, context.width, &rippleColor);
++		p.restore();
+ 	}
+ 
+ 	if (flags & Flag::SavedMessages) {
+@@ -1412,11 +1435,28 @@
+ 		const QString &text,
+ 		int unread,
+ 		const PaintContext &context) {
+-	p.fillRect(
+-		QRect{ 0, 0, context.width, st::dialogsImportantBarHeight },
+-		context.selected ? st::dialogsBgOver : context.currentBg);
++	const auto fullRect = QRect{ 0, 0, context.width, st::dialogsImportantBarHeight };
++	p.fillRect(fullRect, context.currentBg);
++
++	const auto cardRect = fullRect.adjusted(8, 2, -8, -2);
++	constexpr auto cardRadius = 12;
++
++	if (context.selected) {
++		p.save();
++		p.setRenderHint(QPainter::Antialiasing);
++		p.setPen(Qt::NoPen);
++		p.setBrush(st::dialogsBgOver);
++		p.drawRoundedRect(cardRect, cardRadius, cardRadius);
++		p.restore();
++	}
+ 
++	p.save();
++	p.setRenderHint(QPainter::Antialiasing);
++	QPainterPath clip;
++	clip.addRoundedRect(cardRect, cardRadius, cardRadius);
++	p.setClipPath(clip);
+ 	row.paintRipple(p, 0, 0, context.width);
++	p.restore();
+ 
+ 	const auto unreadTop = (st::dialogsImportantBarHeight - st::dialogsUnreadHeight) / 2;
+ 	if (!context.narrow || !folder) {
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.cpp b/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.cpp
+--- a/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.cpp	2026-10-30 02:39:00.533969163 +0300
+@@ -352,14 +352,24 @@
+ 			return QRectF(l, barTop, w, barHeight);
+ 		};
+ 
++		const auto r = barWidth / 2.;
+ 		if ((barLeft < activeWidth) && (barLeft + barWidth > activeWidth)) {
+ 			const auto leftWidth = activeWidth - barLeft;
+ 			const auto rightWidth = barWidth - leftWidth;
+-			p.fillRect(rect(barLeft, leftWidth), active);
+-			p.fillRect(rect(activeWidth, rightWidth), inactive);
++			p.save();
++			p.setClipRect(rect(barLeft, leftWidth), Qt::IntersectClip);
++			p.setBrush(active);
++			p.drawRoundedRect(rect(barLeft, barWidth), r, r);
++			p.restore();
++			p.save();
++			p.setClipRect(rect(activeWidth, rightWidth), Qt::IntersectClip);
++			p.setBrush(inactive);
++			p.drawRoundedRect(rect(barLeft, barWidth), r, r);
++			p.restore();
+ 		} else {
+ 			const auto &color = (barLeft >= activeWidth) ? inactive : active;
+-			p.fillRect(rect(barLeft, barWidth), color);
++			p.setBrush(color);
++			p.drawRoundedRect(rect(barLeft, barWidth), r, r);
+ 		}
+ 		barNum++;
+ 	};
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.style b/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.style
+--- a/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/history/view/controls/history_view_voice_record_bar.style	2026-10-30 02:38:09.981916033 +0300
+@@ -11,7 +11,7 @@
+ historyRecordVoiceOnceBg: icon {{ "voice_lock/audio_once_bg", historySendIconFg }};
+ historyRecordVoiceOnceFg: icon {{ "voice_lock/audio_once_number", windowFgActive }};
+ historyRecordVoiceOnceInactive: icon {{ "chat/audio_once", windowSubTextFg }};
+-historyRecordSignalRadius: 5px;
++historyRecordSignalRadius: 6px;
+ historyRecordFont: font(13px);
+ historyRecordDurationSkip: 12px;
+ historyRecordTextStyle: TextStyle(defaultTextStyle) {
+@@ -33,7 +33,7 @@
+ historyRecordLockInput: icon {{ "voice_lock/input_mic_s", historyToDownFg }};
+ historyRecordLockRound: icon {{ "voice_lock/input_round_s", historyToDownFg }};
+ historyRecordLockRippleMargin: margins(6px, 6px, 6px, 6px);
+-historyRecordWaveformBgRadius: 7px;
++historyRecordWaveformBgRadius: 12px;
+ historyRecordWaveformOutsideAlpha: 0.6;
+ historyRecordWaveformInactiveAlpha: 0.7;
+ historyRecordCenterControlHeight: 18px;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp
+--- a/Telegram/SourceFiles/history/view/history_view_list_widget.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/history/view/history_view_list_widget.cpp	2026-10-30 05:19:23.936507881 +0300
+@@ -28,6 +28,10 @@
+ #include "history/view/history_view_copy_selection.h"
+ #include "history/view/history_view_about_view.h"
+ #include "history/view/history_view_drag.h"
++
++namespace anim {
++extern transition emphasizedDecel;
++}
+ #include "history/view/history_view_element.h"
+ #include "history/view/history_view_emoji_interactions.h"
+ #include "chat_helpers/emoji_interactions.h"
+@@ -1068,9 +1072,7 @@
+ 		_delegate->listScrollTo(scrollTop);
+ 		return;
+ 	}
+-	const auto transition = (type == AnimatedScroll::Full)
+-		? anim::sineInOut
+-		: anim::easeOutCubic;
++	const auto transition = anim::emphasizedDecel;
+ 	if (delta > 0 && scrollTop == height() - (_visibleBottom - _visibleTop)) {
+ 		// Animated scroll to bottom.
+ 		_scrollToAnimation.start(
+@@ -2716,7 +2718,7 @@
+ 					0.,
+ 					1.,
+ 					st::itemRevealDuration,
+-					anim::easeOutQuint);
++					anim::emphasizedDecel);
+ 				if (view->data()->out()) {
+ 					_delegate->listChatTheme()->rotateComplexGradientBackground();
+ 				}
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/history/view/media/history_view_document.cpp b/Telegram/SourceFiles/history/view/media/history_view_document.cpp
+--- a/Telegram/SourceFiles/history/view/media/history_view_document.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/history/view/media/history_view_document.cpp	2026-10-30 02:38:50.380756986 +0300
+@@ -294,20 +294,26 @@
+ 			edgeHeight = barHeight;
+ 			edgeFound = true;
+ 		}
++		const auto r = barWidth / 2.;
+ 		if ((barLeft < activeWidth) && (barLeft + barWidth > activeWidth)) {
+ 			const auto leftWidth = activeWidth - barLeft;
+ 			const auto rightWidth = barWidth - leftWidth;
+-			p.fillRect(
+-				QRectF(barLeft, barTop, leftWidth, barHeight),
+-				active);
++			p.save();
++			p.setClipRect(QRectF(barLeft, barTop, leftWidth, barHeight), Qt::IntersectClip);
++			p.setBrush(active);
++			p.drawRoundedRect(QRectF(barLeft, barTop, barWidth, barHeight), r, r);
++			p.restore();
+ 			if (!ttl) {
+-				p.fillRect(
+-					QRectF(activeWidth, barTop, rightWidth, barHeight),
+-					inactive);
++				p.save();
++				p.setClipRect(QRectF(activeWidth, barTop, rightWidth, barHeight), Qt::IntersectClip);
++				p.setBrush(inactive);
++				p.drawRoundedRect(QRectF(barLeft, barTop, barWidth, barHeight), r, r);
++				p.restore();
+ 			}
+ 		} else if (!ttl || barLeft < activeWidth) {
+ 			const auto &color = (barLeft >= activeWidth) ? inactive : active;
+-			p.fillRect(QRectF(barLeft, barTop, barWidth, barHeight), color);
++			p.setBrush(color);
++			p.drawRoundedRect(QRectF(barLeft, barTop, barWidth, barHeight), r, r);
+ 		}
+ 		if (hoverWidth >= 0) {
+ 			const auto hoverFrom = std::min(activeWidth, hoverWidth);
+@@ -317,9 +323,11 @@
+ 				const auto right = std::min(
+ 					double(barLeft + barWidth),
+ 					hoverTo);
+-				p.fillRect(
+-					QRectF(left, barTop, right - left, barHeight),
+-					anim::with_alpha(active->c, 0.30));
++				p.save();
++				p.setClipRect(QRectF(left, barTop, right - left, barHeight), Qt::IntersectClip);
++				p.setBrush(anim::with_alpha(active->c, 0.30));
++				p.drawRoundedRect(QRectF(barLeft, barTop, barWidth, barHeight), r, r);
++				p.restore();
+ 			}
+ 		}
+ 		barLeft += barWidth + st::msgWaveformSkip;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/history/view/reactions/history_view_reactions.cpp b/Telegram/SourceFiles/history/view/reactions/history_view_reactions.cpp
+--- a/Telegram/SourceFiles/history/view/reactions/history_view_reactions.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/history/view/reactions/history_view_reactions.cpp	2026-10-30 05:16:20.422492977 +0300
+@@ -525,6 +525,15 @@
+ 				0,
+ 			});
+ 			paintSingleBg(p, fill, color, opacity);
++			if (chosen) {
++				p.save();
++				p.setRenderHint(QPainter::Antialiasing);
++				p.setPen(QPen(QColor(155, 208, 204, 180), 1.5));
++				p.setBrush(Qt::NoBrush);
++				const auto radius = fill.height() / 2.;
++				p.drawRoundedRect(QRectF(fill).adjusted(0.75, 0.75, -0.75, -0.75), radius, radius);
++				p.restore();
++			}
+ 			if (inbubble && !chosen) {
+ 				p.setOpacity(bubbleProgress);
+ 			}
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/mainwidget.cpp b/Telegram/SourceFiles/mainwidget.cpp
+--- a/Telegram/SourceFiles/mainwidget.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/mainwidget.cpp	2026-11-01 23:48:36.980291113 +0300
+@@ -1932,6 +1932,7 @@
+ 		result.withTopBarShadow = false;
+ 	}
+ 	result.fromBottom = fromBottom;
++	result.withFade = true;
+ 
+ 	floatPlayerHideAll();
+ 	if (_player) {
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/media/player/media_player.style b/Telegram/SourceFiles/media/player/media_player.style
+--- a/Telegram/SourceFiles/media/player/media_player.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/media/player/media_player.style	2026-10-30 02:38:16.626053968 +0300
+@@ -301,7 +301,7 @@
+ }
+ mediaPlayerPlayback: FilledSlider {
+ 	fullWidth: 6px;
+-	lineWidth: 2px;
++	lineWidth: 3px;
+ 	activeFg: mediaPlayerActiveFg;
+ 	inactiveFg: mediaPlayerInactiveFg;
+ 	disabledFg: mediaPlayerDisabledFg;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/chat/chat.style b/Telegram/SourceFiles/ui/chat/chat.style
+--- a/Telegram/SourceFiles/ui/chat/chat.style	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/chat/chat.style	2026-10-30 02:37:28.202052198 +0300
+@@ -22,7 +22,7 @@
+ msgMinWidth: 160px;
+ msgPhotoSize: 33px;
+ msgPhotoSkip: 40px;
+-msgPadding: margins(11px, 8px, 11px, 8px);
++msgPadding: margins(16px, 11px, 16px, 11px);
+ msgTagBadgePadding: margins(5px, -1px, 5px, 0px);
+ msgTagBadgeBoostSkip: 2px;
+ 
+@@ -30,11 +30,11 @@
+ tagInfoIconPadding: margins(8px, 8px, 8px, 8px);
+ tagInfoPreviewHeight: 80px;
+ tagInfoPreviewGap: 8px;
+-tagInfoPreviewBubbleRadius: 8px;
++tagInfoPreviewBubbleRadius: 15px;
+ tagInfoPreviewLineHeight: 6px;
+ tagInfoPreviewLineSpacing: 4px;
+ tagInfoPreviewBubblePadding: margins(10px, 8px, 10px, 8px);
+-tagInfoPreviewRadius: 8px;
++tagInfoPreviewRadius: 15px;
+ tagInfoPreviewBubbleRightMargin: 10px;
+ tagInfoPreviewFadeWidth: 24px;
+ tagInfoPreviewBadgeTop: 6px;
+@@ -49,8 +49,8 @@
+ 	}
+ }
+ 
+-msgMargin: margins(16px, 6px, 56px, 2px);
+-msgMarginTopAttached: 0px;
++msgMargin: margins(22px, 8px, 64px, 4px);
++msgMarginTopAttached: 2px;
+ msgShadow: 2px;
+ msgSelectionOffset: 30px;
+ msgSelectionBottomSkip: 5px;
+@@ -88,10 +88,10 @@
+ 	padding: margins(0px, 2px, 2px, 0px);
+ }
+ 
+-msgReplyPadding: margins(6px, 6px, 11px, 6px);
++msgReplyPadding: margins(8px, 6px, 12px, 6px);
+ msgReplyBarPos: point(1px, 0px);
+-msgReplyBarSize: size(2px, 36px);
+-msgReplyBarSkip: 10px;
++msgReplyBarSize: size(3px, 36px);
++msgReplyBarSkip: 11px;
+ msgServicePadding: margins(12px, 3px, 12px, 4px);
+ msgServiceMargin: margins(10px, 10px, 10px, 2px);
+ monoforumBarUserpicSkip: 2px;
+@@ -105,7 +105,7 @@
+ messageQuoteStyle: historyQuoteStyle;
+ messageTextStyle: historyTextStyle;
+ historyPagePreview: QuoteStyle(messageQuoteStyle) {
+-	padding: margins(10px, 5px, 7px, 7px);
++	padding: margins(12px, 6px, 8px, 6px);
+ }
+ msgDateTextStyle: defaultTextStyle;
+ serviceTextStyle: TextStyle(defaultTextStyle) {
+@@ -323,8 +323,8 @@
+ }
+ historyInfoToastIcon: icon {{ "toast/info", toastFg }};
+ 
+-bubbleRadiusSmall: roundRadiusLarge;
+-bubbleRadiusLarge: 16px;
++bubbleRadiusSmall: 15px;
++bubbleRadiusLarge: 15px;
+ 
+ historyPhotoLeft: 14px;
+ historyPhotoBubbleMinWidth: 200px;
+@@ -375,8 +375,8 @@
+ 	thumbSkip: pixels;
+ }
+ 
+-msgFileThumbRadiusSmall: 4px;
+-msgFileThumbRadiusLarge: 12px;
++msgFileThumbRadiusSmall: 8px;
++msgFileThumbRadiusLarge: 15px;
+ msgFileLayout: HistoryFileLayout {
+ 	padding: margins(12px, 8px, 10px, 8px);
+ 	nameTop: 12px;
+@@ -426,10 +426,10 @@
+ msgFileOverDuration: 200;
+ msgFileRadialLine: 3px;
+ 
+-msgWaveformBar: 2px;
+-msgWaveformSkip: 1px;
+-msgWaveformMin: 3px;
+-msgWaveformMax: 17px;
++msgWaveformBar: 3px;
++msgWaveformSkip: 2px;
++msgWaveformMin: 4px;
++msgWaveformMax: 18px;
+ 
+ msgVoicePlaybackMinorBlobMinRadius: 25px;
+ msgVoicePlaybackMinorBlobMaxRadius: 28px;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/rows_scroll_cache.cpp b/Telegram/SourceFiles/ui/rows_scroll_cache.cpp
+--- a/Telegram/SourceFiles/ui/rows_scroll_cache.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/rows_scroll_cache.cpp	2026-11-02 00:37:54.034905156 +0300
+@@ -10,7 +10,7 @@
+ namespace Ui {
+ namespace {
+ 
+-constexpr auto kStopTimeout = crl::time(120);
++constexpr auto kStopTimeout = crl::time(2000);
+ 
+ } // namespace
+ 
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/rows_scroll_cache.h b/Telegram/SourceFiles/ui/rows_scroll_cache.h
+--- a/Telegram/SourceFiles/ui/rows_scroll_cache.h	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/rows_scroll_cache.h	2026-11-02 00:37:57.705723324 +0300
+@@ -54,8 +54,8 @@
+ 	void clear();
+ 
+ private:
+-	static constexpr auto kLimit = 256;
+-	static constexpr auto kMemoryLimit = 32 * 1024 * 1024;
++	static constexpr auto kLimit = 1024;
++	static constexpr auto kMemoryLimit = 128 * 1024 * 1024;
+ 
+ 	base::flat_map<uint64, QImage> _images;
+ 	base::Timer _stopTimer;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/widgets/chat_filters_tabs_slider.cpp b/Telegram/SourceFiles/ui/widgets/chat_filters_tabs_slider.cpp
+--- a/Telegram/SourceFiles/ui/widgets/chat_filters_tabs_slider.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/widgets/chat_filters_tabs_slider.cpp	2026-10-30 05:10:47.523209901 +0300
+@@ -357,7 +357,13 @@
+ 			if (bar) {
+ 				bar->paint(p, rect);
+ 			} else {
+-				p.fillRect(rect, active ? _st.barFgActive : _st.barFg);
++				p.save();
++				p.setRenderHint(QPainter::Antialiasing);
++				p.setPen(Qt::NoPen);
++				p.setBrush(active ? _st.barFgActive : _st.barFg);
++				const auto radius = _st.barStroke / 2.0;
++				p.drawRoundedRect(rect, radius, radius);
++				p.restore();
+ 			}
+ 		};
+ 		const auto add = _st.barStroke / 2;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/widgets/continuous_sliders.cpp b/Telegram/SourceFiles/ui/widgets/continuous_sliders.cpp
+--- a/Telegram/SourceFiles/ui/widgets/continuous_sliders.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/widgets/continuous_sliders.cpp	2026-10-30 02:39:10.557178936 +0300
+@@ -246,20 +246,23 @@
+ 	const auto from = seekRect.x();
+ 	const auto mid = int(base::SafeRound(from + value * seekRect.width()));
+ 	const auto end = from + seekRect.width();
++	const auto r = lineWidthRounded / 2.;
+ 	if (mid > from) {
+ 		p.setOpacity(masterOpacity);
+-		p.fillRect(from, height() - lineWidthRounded, (mid - from), lineWidthRounded, disabled ? _st.disabledFg : _st.activeFg);
++		p.setBrush(disabled ? _st.disabledFg : _st.activeFg);
++		p.drawRoundedRect(QRectF(from, height() - lineWidthRounded, (mid - from), lineWidthRounded), r, r);
+ 		if (lineWidthPartial > 0.01) {
+ 			p.setOpacity(masterOpacity * lineWidthPartial);
+-			p.fillRect(from, height() - lineWidthRounded - 1, (mid - from), 1, disabled ? _st.disabledFg : _st.activeFg);
++			p.drawRoundedRect(QRectF(from, height() - lineWidthRounded - 1, (mid - from), 1), 0.5, 0.5);
+ 		}
+ 	}
+ 	if (end > mid && over > 0) {
+ 		p.setOpacity(masterOpacity * over);
+-		p.fillRect(mid, height() - lineWidthRounded, (end - mid), lineWidthRounded, _st.inactiveFg);
++		p.setBrush(_st.inactiveFg);
++		p.drawRoundedRect(QRectF(mid, height() - lineWidthRounded, (end - mid), lineWidthRounded), r, r);
+ 		if (lineWidthPartial > 0.01) {
+ 			p.setOpacity(masterOpacity * over * lineWidthPartial);
+-			p.fillRect(mid, height() - lineWidthRounded - 1, (end - mid), 1, _st.inactiveFg);
++			p.drawRoundedRect(QRectF(mid, height() - lineWidthRounded - 1, (end - mid), 1), 0.5, 0.5);
+ 		}
+ 	}
+ }
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/ui/widgets/discrete_sliders.cpp b/Telegram/SourceFiles/ui/widgets/discrete_sliders.cpp
+--- a/Telegram/SourceFiles/ui/widgets/discrete_sliders.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/ui/widgets/discrete_sliders.cpp	2026-10-30 05:19:29.989640311 +0300
+@@ -7,10 +7,20 @@
+ */
+ #include "ui/widgets/discrete_sliders.h"
+ 
++#include "ui/effects/animation_value.h"
+ #include "ui/effects/ripple_animation.h"
+ #include "styles/style_widgets.h"
++#include <cmath>
++
++namespace anim {
++extern transition emphasizedDecel;
++}
+ 
+ namespace Ui {
++namespace {
++static float64 s_sliderFromLeft = 0.0;
++static float64 s_sliderToLeft = 0.0;
++} // namespace
+ 
+ DiscreteSlider::DiscreteSlider(QWidget *parent, bool snapToLabel)
+ : RpWidget(parent)
+@@ -174,9 +184,34 @@
+ 
+ DiscreteSlider::Range DiscreteSlider::getCurrentActiveRange() const {
+ 	const auto to = getFinalActiveRange();
++	const auto currentLeft = _a_left.value(to.left);
++	const auto currentWidth = _a_width.value(to.width);
++	if (!_a_left.animating()) {
++		return {
++			int(base::SafeRound(currentLeft)),
++			int(base::SafeRound(currentWidth)),
++		};
++	}
++	// Caelestia Liquid Elastic Morphing Tab
++	const auto delta = s_sliderToLeft - s_sliderFromLeft;
++	if (std::abs(delta) > 1.0) {
++		const auto progress = std::clamp((currentLeft - s_sliderFromLeft) / delta, 0.0, 1.0);
++		const auto stretch = std::sin(progress * M_PI) * std::min(30.0, std::abs(delta) * 0.22);
++		if (delta > 0) {
++			return {
++				int(base::SafeRound(currentLeft)),
++				int(base::SafeRound(currentWidth + stretch)),
++			};
++		} else {
++			return {
++				int(base::SafeRound(currentLeft - stretch)),
++				int(base::SafeRound(currentWidth + stretch)),
++			};
++		}
++	}
+ 	return {
+-		int(base::SafeRound(_a_left.value(to.left))),
+-		int(base::SafeRound(_a_width.value(to.width))),
++		int(base::SafeRound(currentLeft)),
++		int(base::SafeRound(currentWidth)),
+ 	};
+ }
+ 
+@@ -241,10 +276,12 @@
+ 		const auto from = getFinalActiveRange();
+ 		_selected = index;
+ 		const auto to = getFinalActiveRange();
+-		const auto duration = getAnimationDuration();
++		const auto duration = getAnimationDuration() ? getAnimationDuration() : 250;
++		s_sliderFromLeft = from.left;
++		s_sliderToLeft = to.left;
+ 		const auto updater = [this] { update(); };
+-		_a_left.start(updater, from.left, to.left, duration);
+-		_a_width.start(updater, from.width, to.width, duration);
++		_a_left.start(updater, from.left, to.left, duration, anim::emphasizedDecel);
++		_a_width.start(updater, from.width, to.width, duration, anim::emphasizedDecel);
+ 		_callbackAfterMs = crl::now() + duration;
+ 	}
+ }
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/SourceFiles/window/window_slide_animation.cpp b/Telegram/SourceFiles/window/window_slide_animation.cpp
+--- a/Telegram/SourceFiles/window/window_slide_animation.cpp	2026-10-21 22:36:21.000000000 +0300
++++ b/Telegram/SourceFiles/window/window_slide_animation.cpp	2026-10-30 05:19:17.502367115 +0300
+@@ -8,6 +8,10 @@
+ #include "window/window_slide_animation.h"
+ #include "styles/style_basic.h"
+ 
++namespace anim {
++extern transition emphasizedDecel;
++}
++
+ 
+ namespace Window {
+ 
+@@ -199,7 +203,7 @@
+ 		std::swap(_cacheUnder, _cacheOver);
+ 	}
+ 	const auto fromBottom = (_direction == SlideDirection::FromBottom);
+-	const auto curve = fromBottom ? anim::easeOutQuint : transition();
++	const auto curve = anim::emphasizedDecel;
+ 	const auto duration = fromBottom
+ 		? (st::slideDuration * 2)
+ 		: st::slideDuration;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/effects/animation_value.cpp b/Telegram/lib_ui/ui/effects/animation_value.cpp
+--- a/Telegram/lib_ui/ui/effects/animation_value.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/effects/animation_value.cpp	2026-10-30 03:43:02.833958808 +0300
+@@ -9,6 +9,8 @@
+ #include "ui/painter.h"
+ 
+ #include <QtCore/QtMath> // M_PI
++#include <algorithm>
++#include <cmath>
+ 
+ namespace anim {
+ namespace {
+@@ -128,6 +130,122 @@
+ 	return result;
+ };
+ 
++class CubicBezierSolver final {
++public:
++	constexpr CubicBezierSolver(
++		float64 x1,
++		float64 y1,
++		float64 x2,
++		float64 y2)
++	: _ax(1.0 - 3.0 * x2 + 3.0 * x1)
++	, _bx(3.0 * x2 - 6.0 * x1)
++	, _cx(3.0 * x1)
++	, _ay(1.0 - 3.0 * y2 + 3.0 * y1)
++	, _by(3.0 * y2 - 6.0 * y1)
++	, _cy(3.0 * y1) {
++	}
++
++	[[nodiscard]] float64 solve(float64 x) const {
++		if (x <= 0.0) {
++			return 0.0;
++		} else if (x >= 1.0) {
++			return 1.0;
++		}
++		return sampleCurveY(solveCurveX(x));
++	}
++
++	[[nodiscard]] float64 sampleCurveX(float64 t) const {
++		return ((_ax * t + _bx) * t + _cx) * t;
++	}
++
++	[[nodiscard]] float64 sampleCurveY(float64 t) const {
++		return ((_ay * t + _by) * t + _cy) * t;
++	}
++
++	[[nodiscard]] float64 sampleCurveDerivativeX(float64 t) const {
++		return (3.0 * _ax * t + 2.0 * _bx) * t + _cx;
++	}
++
++	[[nodiscard]] float64 solveCurveX(float64 x) const {
++		static constexpr auto kPrecision = 1e-7;
++		static constexpr auto kMaxNewtonIterations = 8;
++		static constexpr auto kMaxBisectionIterations = 32;
++
++		const auto clampedX = std::clamp(x, 0.0, 1.0);
++		if (clampedX <= 0.0) {
++			return 0.0;
++		} else if (clampedX >= 1.0) {
++			return 1.0;
++		}
++
++		// First try a few iterations of Newton-Raphson method -- normally very fast.
++		auto t = clampedX;
++		for (auto i = 0; i != kMaxNewtonIterations; ++i) {
++			const auto currentX = sampleCurveX(t) - clampedX;
++			if (std::abs(currentX) < kPrecision) {
++				return t;
++			}
++			const auto currentD = sampleCurveDerivativeX(t);
++			if (std::abs(currentD) < 1e-6) {
++				break;
++			}
++			const auto nextT = t - currentX / currentD;
++			if (nextT < 0.0 || nextT > 1.0) {
++				break;
++			}
++			t = nextT;
++		}
++
++		// Fallback to bisection method for reliability.
++		auto t0 = 0.0;
++		auto t1 = 1.0;
++		t = clampedX;
++
++		for (auto i = 0; (t0 < t1) && (i != kMaxBisectionIterations); ++i) {
++			const auto currentX = sampleCurveX(t);
++			if (std::abs(currentX - clampedX) < kPrecision) {
++				return t;
++			}
++			if (clampedX > currentX) {
++				t0 = t;
++			} else {
++				t1 = t;
++			}
++			t = (t0 + t1) * 0.5;
++		}
++
++		return std::clamp(t, 0.0, 1.0);
++	}
++
++private:
++	float64 _ax = 0.0;
++	float64 _bx = 0.0;
++	float64 _cx = 0.0;
++	float64 _ay = 0.0;
++	float64 _by = 0.0;
++	float64 _cy = 0.0;
++};
++
++transition cubicBezier(float64 x1, float64 y1, float64 x2, float64 y2) {
++	const auto solver = CubicBezierSolver(x1, y1, x2, y2);
++	return [solver](float64 delta, float64 dt) {
++		Expects(!std::isnan(delta));
++		Expects(!std::isnan(dt));
++
++		const auto result = delta * solver.solve(dt);
++
++		Ensures(!std::isnan(result));
++		return result;
++	};
++}
++
++transition emphasizedDecel = cubicBezier(0.05, 0.70, 0.10, 1.00);
++transition emphasizedAccel = cubicBezier(0.30, 0.00, 0.80, 0.15);
++transition standard = cubicBezier(0.20, 0.00, 0.00, 1.00);
++transition standardDecel = cubicBezier(0.00, 0.00, 0.20, 1.00);
++transition expressiveFastSpatial = cubicBezier(0.42, 1.67, 0.21, 0.90);
++transition expressiveDefaultSpatial = cubicBezier(0.38, 1.21, 0.22, 1.00);
++
+ rpl::producer<bool> Disables() {
+ 	return AnimationsDisabled.value();
+ };
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/effects/panel_animation.cpp b/Telegram/lib_ui/ui/effects/panel_animation.cpp
+--- a/Telegram/lib_ui/ui/effects/panel_animation.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/effects/panel_animation.cpp	2026-10-30 03:41:36.773010751 +0300
+@@ -233,12 +233,22 @@
+ }
+ 
+ void PanelAnimation::setStartWidth() {
+-	_startWidth = int(base::SafeRound(_st.startWidth * _finalInnerWidth));
++	// Caelestia/Hyprland popin 88%: subtle proportional scaling from ~0.88 to 1.0
++	// instead of rough squishing from smaller initial sizes.
++	const auto startRatio = (_st.startWidth >= 0. && _st.startWidth < 0.88)
++		? 0.88
++		: _st.startWidth;
++	_startWidth = int(base::SafeRound(startRatio * _finalInnerWidth));
+ 	if (_startWidth >= 0) Assert(_startWidth <= _finalInnerWidth);
+ }
+ 
+ void PanelAnimation::setStartHeight() {
+-	_startHeight = int(base::SafeRound(_st.startHeight * _finalInnerHeight));
++	// Caelestia/Hyprland popin 88%: subtle proportional scaling from ~0.88 to 1.0
++	// instead of rough squishing from smaller initial sizes.
++	const auto startRatio = (_st.startHeight >= 0. && _st.startHeight < 0.88)
++		? 0.88
++		: _st.startHeight;
++	_startHeight = int(base::SafeRound(startRatio * _finalInnerHeight));
+ 	if (_startHeight >= 0) Assert(_startHeight <= _finalInnerHeight);
+ }
+ 
+@@ -311,8 +321,18 @@
+ 	RoundShadowAnimation::start(_finalWidth, _finalHeight, _finalImage.devicePixelRatio());
+ 	auto checkCorner = [this](const Corner &corner) {
+ 		if (!corner.valid()) return;
+-		if (_startWidth >= 0) Assert(corner.width <= _startWidth);
+-		if (_startHeight >= 0) Assert(corner.height <= _startHeight);
++		if (_startWidth >= 0) {
++			if (_startWidth < corner.width) {
++				_startWidth = std::min(corner.width, _finalInnerWidth);
++			}
++			Assert(corner.width <= _startWidth);
++		}
++		if (_startHeight >= 0) {
++			if (_startHeight < corner.height) {
++				_startHeight = std::min(corner.height, _finalInnerHeight);
++			}
++			Assert(corner.height <= _startHeight);
++		}
+ 		Assert(corner.width <= _finalInnerWidth);
+ 		Assert(corner.height <= _finalInnerHeight);
+ 	};
+@@ -324,7 +344,7 @@
+ 
+ auto PanelAnimation::computeState(float64 dt, float64 opacity) const
+ -> PaintState {
+-	auto &transition = anim::easeOutCirc;
++	auto &transition = anim::emphasizedDecel;
+ 	if (dt < _alphaDuration) {
+ 		opacity *= transition(1., dt / _alphaDuration);
+ 	}
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/layers/layer_widget.cpp b/Telegram/lib_ui/ui/layers/layer_widget.cpp
+--- a/Telegram/lib_ui/ui/layers/layer_widget.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/layers/layer_widget.cpp	2026-10-30 03:38:41.412041233 +0300
+@@ -15,6 +15,7 @@
+ #include "ui/round_rect.h"
+ #include "base/qt/qt_tab_key.h"
+ #include "base/integration.h"
++#include "base/algorithm.h"
+ #include "styles/style_layers.h"
+ #include "styles/style_widgets.h"
+ #include "styles/palette.h"
+@@ -206,7 +207,8 @@
+ 			[this] { animationCallback(); },
+ 			_layerShown ? 0. : 1.,
+ 			_layerShown ? 1. : 0.,
+-			_duration);
++			_duration,
++			_layerShown ? anim::emphasizedDecel : anim::emphasizedAccel);
+ 	}
+ 	checkWasShown(wasShown);
+ }
+@@ -316,6 +318,9 @@
+ 		auto cacheTop = specialLayerBox.y() - (specialLayerBox.y() > 0 ? st::boxRoundShadow.extend.top() : 0);
+ 		p.drawPixmapLeft(cacheLeft, cacheTop, width(), _specialLayerCache);
+ 	}
++	const auto vertShift = int(base::SafeRound(
++		(1.0 - layerOpacity) * (layerBox.height() * 0.15)));
++	const auto animatedLayerBox = layerBox.translated(0, vertShift);
+ 	if (!layerBox.isEmpty()) {
+ 		if (!_specialLayerCache.isNull()) {
+ 			p.setOpacity(overSpecialOpacity);
+@@ -323,12 +328,12 @@
+ 		}
+ 		if (_layerCache.isNull()) {
+ 			p.setOpacity(layerOpacity);
+-			Ui::Shadow::paint(p, layerBox, width(), st::boxRoundShadow);
++			Ui::Shadow::paint(p, animatedLayerBox, width(), st::boxRoundShadow);
+ 		}
+ 	}
+ 	if (!_layerCache.isNull() && layerOpacity > 0) {
+ 		p.setOpacity(layerOpacity);
+-		p.drawPixmapLeft(layerBox.topLeft() - QPoint(st::boxRoundShadow.extend.left(), st::boxRoundShadow.extend.top()), width(), _layerCache);
++		p.drawPixmapLeft(animatedLayerBox.topLeft() - QPoint(st::boxRoundShadow.extend.left(), st::boxRoundShadow.extend.top()), width(), _layerCache);
+ 	}
+ 	if (!_mainMenuCache.isNull() && mainMenuRight > 0) {
+ 		p.setOpacity(1.);
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/widgets/elastic_scroll.cpp b/Telegram/lib_ui/ui/widgets/elastic_scroll.cpp
+--- a/Telegram/lib_ui/ui/widgets/elastic_scroll.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/widgets/elastic_scroll.cpp	2026-11-02 01:17:38.737126256 +0300
+@@ -421,6 +421,7 @@
+ 
+ 	_bar->visibleFromDragged(
+ 	) | rpl::on_next([=](int from) {
++		_smoothWheelAnimation.stop();
+ 		tryScrollTo(from, false);
+ 	}, _bar->lifetime());
+ }
+@@ -952,13 +953,33 @@
+ 			if (!weak) {
+ 				return true;
+ 			}
+-			tryScrollTo(_state.visibleFrom + delta);
++			const auto maxPos = _vertical ? scrollTopMax() : scrollLeftMax();
++			const auto startFrom = _smoothWheelAnimation.animating()
++				? _smoothWheelTarget
++				: _state.visibleFrom;
++			const auto target = std::clamp(startFrom + delta, 0, maxPos);
++			_smoothWheelTarget = target;
++			const auto from = _state.visibleFrom;
++			if (from != target) {
++				_smoothWheelAnimation.start(
++					[=] {
++						const auto current = int(base::SafeRound(
++							_smoothWheelAnimation.value(_smoothWheelTarget)));
++						const auto finished = !_smoothWheelAnimation.animating();
++						tryScrollTo(current, finished);
++					},
++					from,
++					target,
++					crl::time(160),
++					anim::easeOutCubic);
++			}
+ 			_movement = Movement::None;
+ 		} else if (!_overscrollReturnAnimation.animating()) {
+ 			overscrollReturn();
+ 		}
+ 		return true;
+ 	}
++	_smoothWheelAnimation.stop();
+ 	const auto momentum = (phase == Qt::ScrollMomentum)
+ 		|| (phase == Qt::ScrollEnd);
+ 	trackWheelVelocity(phase, delta, crl::time(e->timestamp()));
+@@ -1569,6 +1590,7 @@
+ }
+ 
+ void ElasticScroll::keyPressEvent(QKeyEvent *e) {
++	_smoothWheelAnimation.stop();
+ 	const auto key = e->key();
+ 	if (!_widget) {
+ 		e->ignore();
+@@ -1655,6 +1677,7 @@
+ }
+ 
+ void ElasticScroll::scrollTo(int toFrom, int toTill) {
++	_smoothWheelAnimation.stop();
+ 	if (const auto inner = _widget.data()) {
+ 		SendPendingMoveResizeEvents(inner);
+ 	}
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/widgets/elastic_scroll.h b/Telegram/lib_ui/ui/widgets/elastic_scroll.h
+--- a/Telegram/lib_ui/ui/widgets/elastic_scroll.h	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/widgets/elastic_scroll.h	2026-11-02 01:17:12.577930509 +0300
+@@ -383,6 +383,9 @@
+ 	float64 _springV0 = 0.;
+ 	float64 _springPeakTime = 0.;
+ 
++	Ui::Animations::Simple _smoothWheelAnimation;
++	int _smoothWheelTarget = 0;
++
+ 	object_ptr<QWidget> _widget = { nullptr };
+ 
+ 	rpl::event_stream<int> _scrollValueUpdated;
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/widgets/fields/input_field.cpp b/Telegram/lib_ui/ui/widgets/fields/input_field.cpp
+--- a/Telegram/lib_ui/ui/widgets/fields/input_field.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/widgets/fields/input_field.cpp	2026-10-30 05:11:09.570692246 +0300
+@@ -2890,6 +2890,17 @@
+ 
+ 	PainterHighQualityEnabler hq(p);
+ 	const auto radius = _st.borderRadius - borderHalf;
++	if (focusedDegree > 0.001) {
++		p.save();
++		p.setPen(QPen(QColor(155, 208, 204, int(48 * focusedDegree)), 2.5));
++		p.setBrush(Qt::NoBrush);
++		p.drawRoundedRect(
++			QRectF(0, 0, width(), height()).marginsRemoved(
++				QMarginsF(borderHalf, borderHalf, borderHalf, borderHalf)),
++			radius,
++			radius);
++		p.restore();
++	}
+ 	p.drawRoundedRect(
+ 		QRectF(0, 0, width(), height()).marginsRemoved(
+ 			QMarginsF(borderHalf, borderHalf, borderHalf, borderHalf)),
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/widgets/menu/menu_action.cpp b/Telegram/lib_ui/ui/widgets/menu/menu_action.cpp
+--- a/Telegram/lib_ui/ui/widgets/menu/menu_action.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/widgets/menu/menu_action.cpp	2026-10-30 05:10:58.571451609 +0300
+@@ -96,12 +96,21 @@
+ }
+ 
+ void Action::paintBackground(QPainter &p, bool selected) {
+-	if (selected && _st.itemBgOver->c.alpha() < 255) {
++	if (_st.itemBg->c.alpha() > 0) {
+ 		p.fillRect(0, 0, width(), _height, _st.itemBg);
+ 	}
+-	p.fillRect(
+-		QRect(0, 0, width(), _height),
+-		selected ? _st.itemBgOver : _st.itemBg);
++	if (selected) {
++		p.save();
++		p.setRenderHint(QPainter::Antialiasing);
++		p.setPen(Qt::NoPen);
++		p.setBrush(_st.itemBgOver);
++		// Caelestia rounded floating pill for menu item selection
++		p.drawRoundedRect(
++			QRectF(4.0, 2.0, width() - 8.0, _height - 4.0),
++			8.0,
++			8.0);
++		p.restore();
++	}
+ }
+ 
+ void Action::paintText(Painter &p) {
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/widgets/popup_menu.cpp b/Telegram/lib_ui/ui/widgets/popup_menu.cpp
+--- a/Telegram/lib_ui/ui/widgets/popup_menu.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/widgets/popup_menu.cpp	2026-10-30 03:41:55.927444329 +0300
+@@ -6,6 +6,7 @@
+ //
+ #include "ui/widgets/popup_menu.h"
+ 
++#include "ui/effects/animation_value.h"
+ #include "base/platform/base_platform_info.h"
+ #include "base/invoke_queued.h"
+ #include "base/weak_qptr.h"
+@@ -848,7 +849,8 @@
+ 		[=] { opacityAnimationCallback(); },
+ 		_hiding ? 1. : 0.,
+ 		_hiding ? 0. : 1.,
+-		_st.duration);
++		_st.duration,
++		_hiding ? anim::emphasizedAccel : anim::emphasizedDecel);
+ }
+ 
+ void PopupMenu::showStarted() {
+diff -ruN '--exclude=night-green.tdesktop-theme' a/Telegram/lib_ui/ui/wrap/slide_wrap.cpp b/Telegram/lib_ui/ui/wrap/slide_wrap.cpp
+--- a/Telegram/lib_ui/ui/wrap/slide_wrap.cpp	2026-10-21 20:25:43.000000000 +0300
++++ b/Telegram/lib_ui/ui/wrap/slide_wrap.cpp	2026-10-30 03:38:21.496590413 +0300
+@@ -65,7 +65,7 @@
+ 				_toggled ? 0. : 1.,
+ 				_toggled ? 1. : 0.,
+ 				_duration,
+-				anim::linear);
++				_toggled ? anim::emphasizedDecel : anim::emphasizedAccel);
+ 			if (_finishedCallback) {
+ 				_animation.setFinishedCallback(_finishedCallback);
+ 			}
