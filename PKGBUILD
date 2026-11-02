@@ -6,7 +6,7 @@ pkgver=7.3.3
 _td_commit=c15d3f5a5de6e3ba5839822c451152e5e18bb700
 _wallet_engine_ver=0.0.7
 pkgrel=2
-pkgdesc='Official Telegram Desktop client'
+pkgdesc='Telegram Desktop with Caelestia interface and motion changes'
 arch=('x86_64')
 url="https://desktop.telegram.org/"
 license=('GPL-3.0-or-later WITH OpenSSL-exception')
@@ -90,8 +90,8 @@ source=(
   # We're vendoring wallet-engine because tdesktop requires a massive patch against it.
   wallet-engine-${_wallet_engine_ver}.tar.gz::https://github.com/i582/wallet-engine/archive/refs/tags/v${_wallet_engine_ver}.tar.gz
   https://github.com/desktop-app/patches/raw/refs/heads/master/wallet-engine.patch
-  patches/caelestia.patch
-  patches/night-green.tdesktop-theme
+  caelestia.patch
+  night-green.tdesktop-theme
 )
 sha512sums=('3e76971f5ac1c8b4f29c867cf2a6e52f5eb71e479533daaaef26ba8bf53c10c6dd0abc09bb99ec213582546a50fa5306b2bcad023e85024979ebf04603c48540'
             'dd4741b3621c5e76ba7c9eee44ffd41b1e6b6c24fdb19988efd780d307aff79a9dcfd710be9ad63db6857cbbd71c273c54d82be524a5326fc22f1233d9eb6ca2'

@@ -1,6 +1,16 @@
 # Telegram Caelestia
 
-Telegram Caelestia is a locally customized Telegram Desktop 7.3.3 source tree, an Arch Linux `PKGBUILD` for building it, and a browser based motion concept lab. The desktop changes currently present in the source include a stretched animated tab indicator, rounded menu selection styling, and a more proportional panel entrance animation. The build recipe packages Telegram Desktop; the motion lab is a separate prototype and is not installed by that recipe.
+Telegram Caelestia is an experimental visual customization of Telegram Desktop 7.3.3, distributed as a source patch and an Arch Linux `PKGBUILD`, with a separate browser-based motion concept lab. The desktop changes currently present in the source include a stretched animated tab indicator, rounded menu selection styling, and a more proportional panel entrance animation. The build recipe packages Telegram Desktop; the motion lab is a separate prototype and is not installed by that recipe.
+
+> **Experimental:** The package replaces `telegram-desktop`. The current patch displays a performance HUD and writes diagnostic data to `/tmp/telegram_anim_perf.log`; see [profiling notes](docs/PROFILING.md). A clean package build has not yet been validated.
+
+## Motion previews
+
+These GIFs illustrate Motion Lab concepts; they are not recordings of the desktop client.
+
+| Liquid tabs | Bubble launch | Reaction burst |
+| :---: | :---: | :---: |
+| ![Liquid tabs concept](motion_studio/gifs/01_liquid_tabs.gif) | ![Bubble launch concept](motion_studio/gifs/02_bubble_launch.gif) | ![Reaction burst concept](motion_studio/gifs/08_reaction_burst.gif) |
 
 ## What's here
 
@@ -36,6 +46,12 @@ This is a native source build with a substantial C++ dependency toolchain; it is
 ## Import the theme
 
 In Telegram Desktop, open **Settings → Chat Settings → Chat Background** (or the theme controls for your installed version) and import `night-green-original.tdesktop-theme`. The archive contains `colors.tdesktop-theme` and `background.png`. This theme is an optional separate asset; it is not automatically applied by `PKGBUILD`.
+
+## Checks
+
+Run `./scripts/check.sh` to check recipe syntax, local checksums, theme archives and referenced GIFs. Run `./scripts/check.sh --upstream` to also download and verify the upstream release and dry-run the patch. These checks do not compile the desktop client or test its UI.
+
+See [changes](docs/CHANGES.md) for the patch inventory and [profiling](docs/PROFILING.md) for measurement limitations and a repeatable investigation plan.
 
 ## Local source changes
 
